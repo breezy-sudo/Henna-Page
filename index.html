@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title> ✦ Meenahs Henna Art ✦</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- Top Banner -->
+  <div class="top-banner">
+    ✦ Book your henna experience today &nbsp;|&nbsp; Home service available &nbsp;|&nbsp; Bridal specialists ✦
+  </div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <span class="logo-ornament">⟡</span>
+      <div>
+        <h1 class="logo-title">Meenahs Henna Art</h1>
+        <p class="logo-sub">Traditional · Bridal · Artistic</p>
+      </div>
+      <span class="logo-ornament">⟡</span>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <ul class="nav-links">
+      <li><a href="#" class="nav-link active" data-page="booking">Booking</a></li>
+      <li><a href="#" class="nav-link" data-page="gallery">Gallery</a></li>
+      <li><a href="#" class="nav-link" data-page="about">About Us</a></li>
+      <li><a href="#" class="nav-link" data-page="contact">Contact</a></li>
+      <li> <a href="admin.html" class="nav-link admin-nav">⚙ Admin</a></li>
+    </ul>
+  </nav>
+
+  <!-- Pages -->
+  <main class="main-content">
+
+    <!-- ===== BOOKING PAGE ===== -->
+    <section class="page active" id="page-booking">
+      <div class="section-header">
+        <p class="section-eyebrow">Reserve your session</p>
+        <h2 class="section-title">Book Your Appointment</h2>
+        <div class="divider"><span>❧</span></div>
+      </div>
+
+      <form class="booking-form" id="bookingForm" onsubmit="submitBooking(event)">
+
+        <!-- Step 1: Date & Time -->
+        <div class="form-card">
+          <div class="card-label"><span class="step-num">01</span> When would you like your appointment?</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="bookDate">Select Date</label>
+              <input type="date" id="bookDate" required title="Choose appointment date" />
+            </div>
+            <div class="form-group">
+              <label for="bookTime">Select Time</label>
+              <select id="bookTime" required title="Choose a time">
+                <option value="" disabled selected>Choose a time</option>
+                <option>9:00 AM</option>
+                <option>10:00 AM</option>
+                <option>11:00 AM</option>
+                <option>12:00 PM</option>
+                <option>1:00 PM</option>
+                <option>2:00 PM</option>
+                <option>3:00 PM</option>
+                <option>4:00 PM</option>
+                <option>5:00 PM</option>
+                <option>6:00 PM</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Henna Type -->
+        <div class="form-card">
+          <div class="card-label"><span class="step-num">02</span> What type of henna do you prefer?</div>
+          <div class="option-grid">
+            <label class="option-card">
+              <input type="radio" name="hennaType" value="local" required />
+              <div class="option-inner">
+                <span class="option-icon">🌿</span>
+                <span class="option-name">Local Henna</span>
+                <span class="option-desc">Natural traditional paste</span>
+              </div>
+            </label>
+            <label class="option-card">
+              <input type="radio" name="hennaType" value="black" />
+              <div class="option-inner">
+                <span class="option-icon">🖤</span>
+                <span class="option-name">Black Henna</span>
+                <span class="option-desc">Bold, striking designs</span>
+              </div>
+            </label>
+            <label class="option-card">
+              <input type="radio" name="hennaType" value="bridal" />
+              <div class="option-inner">
+                <span class="option-icon">👑</span>
+                <span class="option-name">Bridal Henna</span>
+                <span class="option-desc">Elaborate bridal artistry</span>
+              </div>
+            </label>
+            <label class="option-card">
+              <input type="radio" name="hennaType" value="mix" />
+              <div class="option-inner">
+                <span class="option-icon">✨</span>
+                <span class="option-name">Mix / Custom</span>
+                <span class="option-desc">Blend of styles</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Step 3: Body Area -->
+        <div class="form-card">
+          <div class="card-label"><span class="step-num">03</span> Which area would you like decorated?</div>
+          <div class="option-grid">
+            <label class="option-card">
+              <input type="radio" name="bodyArea" value="hands" required />
+              <div class="option-inner">
+                <span class="option-icon">🤲</span>
+                <span class="option-name">Hands Only</span>
+                <span class="option-desc">Both hands</span>
+              </div>
+            </label>
+            <label class="option-card">
+              <input type="radio" name="bodyArea" value="feet" />
+              <div class="option-inner">
+                <span class="option-icon">🦶</span>
+                <span class="option-name">Feet Only</span>
+                <span class="option-desc">Both feet</span>
+              </div>
+            </label>
+            <label class="option-card">
+              <input type="radio" name="bodyArea" value="hands_feet" />
+              <div class="option-inner">
+                <span class="option-icon">🌸</span>
+                <span class="option-name">Hands & Feet</span>
+                <span class="option-desc">Full set</span>
+              </div>
+            </label>
+            <label class="option-card">
+              <input type="radio" name="bodyArea" value="palms" />
+              <div class="option-inner">
+                <span class="option-icon">🖐</span>
+                <span class="option-name">Palms Only</span>
+                <span class="option-desc">Palm designs</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Step 4: Service Location -->
+        <div class="form-card">
+          <div class="card-label"><span class="step-num">04</span> Where will the service take place?</div>
+          <div class="option-grid two-col">
+            <label class="option-card">
+              <input type="radio" name="location" value="studio" required />
+              <div class="option-inner">
+                <span class="option-icon">🏠</span>
+                <span class="option-name">Visit Studio</span>
+                <span class="option-desc">Come to our location</span>
+              </div>
+            </label>
+            <label class="option-card">
+              <input type="radio" name="location" value="home" />
+              <div class="option-inner">
+                <span class="option-icon">🚗</span>
+                <span class="option-name">Home Service</span>
+                <span class="option-desc">We come to you</span>
+              </div>
+            </label>
+          </div>
+          <div id="homeAddressField" class="hidden form-group form-group--spaced">
+            <label for="homeAddress">Your Address</label>
+            <input type="text" id="homeAddress" placeholder="Enter your full address" />
+          </div>
+        </div>
+
+        <!-- Step 5: Payment -->
+        <div class="form-card">
+          <div class="card-label"><span class="step-num">05</span> Payment preference</div>
+          <div class="option-grid two-col">
+            <label class="option-card">
+              <input type="radio" name="payment" value="deposit" required />
+              <div class="option-inner">
+                <span class="option-icon">💳</span>
+                <span class="option-name">Pay Deposit Now</span>
+                <span class="option-desc">Secure your spot</span>
+              </div>
+            </label>
+            <label class="option-card">
+              <input type="radio" name="payment" value="after" />
+              <div class="option-inner">
+                <span class="option-icon">💵</span>
+                <span class="option-name">Pay After Service</span>
+                <span class="option-desc">Full amount on the day</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Step 6: Personal Info -->
+        <div class="form-card">
+          <div class="card-label"><span class="step-num">06</span> Your details</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="clientName">Full Name</label>
+              <input type="text" id="clientName" placeholder="Your full name" required />
+            </div>
+            <div class="form-group">
+              <label for="clientPhone">Phone Number</label>
+              <input type="tel" id="clientPhone" placeholder=" e.g. +234 (000) 000-0000" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="clientEmail">Email Address</label>
+            <input type="email" id="clientEmail" placeholder="your@email.com" required />
+          </div>
+          <div class="form-group">
+            <label for="clientNotes">Special Requests / Notes</label>
+            <textarea id="clientNotes" rows="3"
+              placeholder="Any design ideas, allergies, or special requests…"></textarea>
+          </div>
+        </div>
+
+        <button class="btn-primary" type="submit">
+          <span>Confirm Booking</span>
+          <span class="btn-ornament">✦</span>
+        </button>
+      </form>
+
+      <!-- Success Message -->
+      <div id="successMsg" class="success-msg hidden">
+        <div class="success-inner">
+          <div class="success-icon">🌸</div>
+          <h3>Your appointment is confirmed!</h3>
+          <p>Thank you for booking with Meenahs Henna Art. We'll reach out shortly to confirm your session details.</p>
+          <button class="btn-secondary" onclick="resetForm()">Book Another Appointment</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== GALLERY PAGE ===== -->
+    <section class="page" id="page-gallery">
+      <div class="section-header">
+        <p class="section-eyebrow">Our work</p>
+        <h2 class="section-title">Henna Gallery</h2>
+        <div class="divider"><span>❧</span></div>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-item g-tall gallery-bridal-full-set">
+          <div class="gallery-label">Bridal Full Set</div>
+        </div>
+        <div class="gallery-item gallery-hand-mandala">
+          <div class="gallery-label">Hand Mandala</div>
+        </div>
+        <div class="gallery-item gallery-black-henna">
+          <div class="gallery-label">Black Henna</div>
+        </div>
+        <div class="gallery-item g-wide gallery-bridal-feet">
+          <div class="gallery-label">Bridal Feet Design</div>
+        </div>
+        <div class="gallery-item gallery-palm-florals">
+          <div class="gallery-label">Palm Florals</div>
+        </div>
+        <div class="gallery-item gallery-mix-design">
+          <div class="gallery-label">Mix Design</div>
+        </div>
+
+        <div class="gallery-item gallery-tattoo-inspired">
+          <div class="gallery-label">Tattoo-Inspired</div>
+        </div>
+      </div>
+      <p class="gallery-note">📸 Follow us on Instagram <strong>@meenahs henna art</strong> and Tiktok
+        <strong>_Meenahs_henna_art</strong> for daily inspiration
+      </p>
+    </section>
+
+    <!-- ===== ABOUT PAGE ===== -->
+    <section class="page" id="page-about">
+      <div class="section-header">
+        <p class="section-eyebrow">Our story</p>
+        <h2 class="section-title">About Meenahs Henna Art</h2>
+        <div class="divider"><span>❧</span></div>
+      </div>
+      <div class="about-grid">
+        <div class="about-image-block">
+          <div class="about-image-placeholder">
+            <span>🌿</span>
+            <p>Meenah's Portrait</p>
+          </div>
+        </div>
+        <div class="about-text">
+          <h3>Where Tradition Meets Art</h3>
+          <p>Welcome to <em>Meenahs Henna Art</em> — a celebration of an ancient craft reimagined for modern beauty.
+            Founded by Meenah, a passionate henna artist with roots in traditional Eastern artistry, our studio has been
+            adorning hands and hearts for over a decade.</p>
+          <p>Every stroke is intentional. Every pattern tells a story. Whether it's a grand bridal occasion or a casual
+            adornment, we bring the same dedication and love to every session.</p>
+          <p>We offer both local and black henna, specialising in intricate bridal sets that transform your hands and
+            feet into living canvases.</p>
+          <div class="stats-row">
+            <div class="stat"><span class="stat-num">500+</span><span class="stat-label">Happy Clients</span></div>
+            <div class="stat"><span class="stat-num">10+</span><span class="stat-label">Years Experience</span></div>
+            <div class="stat"><span class="stat-num">4</span><span class="stat-label">Henna Styles</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="values-row">
+        <div class="value-card">
+          <span>🌿</span>
+          <h4>Natural Ingredients</h4>
+          <p>We use only premium, skin-safe henna pastes — no harmful chemicals.</p>
+        </div>
+        <div class="value-card">
+          <span>✨</span>
+          <h4>Custom Designs</h4>
+          <p>Every design is tailored to you — your vision, your style, your moment.</p>
+        </div>
+        <div class="value-card">
+          <span>🚗</span>
+          <h4>Home Service</h4>
+          <p>Can't come to us? We'll come to you — comfort is part of the experience.</p>
+        </div>
+        <div class="value-card">
+          <span>👑</span>
+          <h4>Bridal Experts</h4>
+          <p>Our bridal packages are crafted for your most special day.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CONTACT PAGE ===== -->
+    <section class="page" id="page-contact">
+      <div class="section-header">
+        <p class="section-eyebrow">Reach out</p>
+        <h2 class="section-title">Contact Us</h2>
+        <div class="divider"><span>❧</span></div>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h3>Get In Touch</h3>
+          <p>We'd love to hear from you. Reach out for pricing, custom requests, or any questions about your henna
+            experience.</p>
+          <div class="contact-item">
+            <span class="c-icon">📍</span>
+            <div>
+              <strong>Studio Address</strong>
+              <p>HajjCamp Quarters<br />Gwagwalada, Abuja</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <span class="c-icon">📞</span>
+            <div>
+              <strong>Phone / WhatsApp</strong>
+              <p>+234 9037935182</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <span class="c-icon">📧</span>
+            <div>
+              <strong>Email</strong>
+              <p>amina.muhammadusman2002@mail.com</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <span class="c-icon">🕐</span>
+            <div>
+              <strong>Hours</strong>
+              <p>Mon–Sat: 7:00 AM – 7:00 PM<br />Sunday: By Appointment</p>
+            </div>
+          </div>
+          <div class="social-links">
+            <a href="https://www.instagram.com/_Meenahs_henna_art" target="_blank" class="social-btn">Instagram</a>
+            <a href="https://wa.me/2349037935182" target="_blank" class="social-btn">WhatsApp</a>
+            <a href="https://www.facebook.com/meenahshennaart" target="_blank" class="social-btn">Facebook</a>
+          </div>
+        </div>
+
+        <div class="contact-form-wrap">
+          <form class="contact-form" onsubmit="submitContact(event)">
+            <div class="form-group">
+              <label for="contactName">Your Name</label>
+              <input id="contactName" type="text" placeholder="Full name" required />
+            </div>
+            <div class="form-group">
+              <label for="contactPhone">Phone Number</label>
+              <input type="tel" id="contactPhone" placeholder="e.g. +2348012345678" required />
+              <small style="color: var(--text-light); font-size: 0.72rem; margin-top: 0.3rem;">
+                Include your country code so we can reach you on WhatsApp
+              </small>
+            </div>
+            <div class="form-group">
+              <label for="contactSubject">Subject</label>
+              <select id="contactSubject" title="Select subject">
+                <option>General Inquiry</option>
+                <option>Bridal Package</option>
+                <option>Pricing</option>
+                <option>Home Service</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="contactMessage">Message</label>
+              <textarea id="contactMessage" rows="5" placeholder="How can we help?" required></textarea>
+            </div>
+            <div class="whatsapp-notice">
+              <span class="wa-icon">💬</span>
+              <p>Your message will be sent directly to us via <strong>WhatsApp</strong> — fast, friendly and personal.
+                We typically reply within a few hours!</p>
+            </div>
+
+            <button class="btn-whatsapp-send" type="submit">
+              <span class="wa-btn-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="white">
+                  <path
+                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                </svg>
+              </span>
+              <span>Send Message on WhatsApp</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-ornament">✦ ❧ ✦</div>
+    <p class="footer-name">Meenahs Henna Art</p>
+    <p class="footer-copy">© 2026 Meenahs Henna Art. All rights reserved. Crafted with love.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
