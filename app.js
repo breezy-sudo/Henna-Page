@@ -31,11 +31,14 @@ if (dateInput) {
 document.querySelectorAll('input[name="location"]').forEach(radio => {
   radio.addEventListener('change', () => {
     const field = document.getElementById('homeAddressField');
+    const studioField = document.getElementById('studioAddressField');
     const addressInput = document.getElementById('homeAddress');
     if (radio.value === 'home' && radio.checked) {
       field.classList.remove('hidden');
+      studioField.classList.add('hidden');
       addressInput.setAttribute('required', '');
     } else if (radio.value !== 'home' && radio.checked) {
+      studioField.classList.remove('hidden');
       field.classList.add('hidden');
       addressInput.removeAttribute('required');
     }

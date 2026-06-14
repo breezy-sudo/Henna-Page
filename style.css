@@ -901,3 +901,41 @@ body {
   align-items: center;
   justify-content: center;
 }
+
+/* ── Studio Info Box ── */
+.studio-info-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background: linear-gradient(135deg, #fff8ee, #fff3e0);
+  border: 1.5px solid var(--amber-light);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+}
+
+.studio-info-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.studio-info-box strong {
+  display: block;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 0.3rem;
+}
+
+.studio-info-box p {
+  font-size: 0.88rem;
+  color: var(--text-mid);
+  line-height: 1.6;
+}
+
+.studio-info-box small {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  margin-top: 0.3rem;
+  display: block;
+}
