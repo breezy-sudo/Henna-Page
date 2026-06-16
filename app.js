@@ -53,42 +53,58 @@ function submitBooking(e) {
   const time = document.getElementById('bookTime').value;
   const name = document.getElementById('clientName').value.trim();
   const phone = document.getElementById('clientPhone').value.trim();
-  const email = document.getElementById('clientEmail').value.trim();
   const hennaType = document.querySelector('input[name="hennaType"]:checked')?.value;
   const bodyArea = document.querySelector('input[name="bodyArea"]:checked')?.value;
   const location = document.querySelector('input[name="location"]:checked')?.value;
+  const homeAddress = document.getElementById('homeAddress')?.value.trim();
   const payment = document.querySelector('input[name="payment"]:checked')?.value;
+  const notes = document.getElementById('clientNotes')?.value.trim();
 
-  if (!date || !time || !name || !phone || !email || !hennaType || !bodyArea || !location || !payment) {
+
+  if (!date || !time || !name || !phone || !hennaType || !bodyArea || !location || !payment) {
     showToast('Please complete all required fields before submitting.', 'error');
     return;
   }
 
-  // Simulate API call / Firebase write
-  const booking = {
-    id: 'MHA-' + Date.now(),
-    client: { name, phone, email },
-    appointment: { date, time },
-    service: { hennaType, bodyArea, location, payment },
-    notes: document.getElementById('clientNotes').value,
-    status: 'pending',
-    createdAt: new Date().toISOString()
+  // creating boooking object
+  const bookingData = {
+    name: name,
+    phone: phone,
+    date: date,
+    time: time,
+    hennaType: hennaType,
+    bodyArea: bodyArea,
+    location: location,
+    homeAddress: homeAddress,
+    payment: payment,
+    notes: notes
   };
 
-  console.log('📋 Booking Data:', booking);
+  showToast('Saving your booking....🌸', 'success');
 
-  // Save to localStorage as a lightweight stand-in for Firebase
-  const bookings = JSON.parse(localStorage.getItem('meenahs_bookings') || '[]');
-  bookings.push(booking);
-  localStorage.setItem('meenahs_bookings', JSON.stringify(bookings));
+  // Sendin to express server
+  fetch('http://localhost:7000/bookings', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(bookingData)
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Booking saved to mongoDB:', data);
 
-  // Show success
-  document.getElementById('bookingForm').classList.add('hidden');
-  document.getElementById('successMsg').classList.remove('hidden');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  showToast('Booking submitted! We\'ll be in touch shortly. 🌸', 'success');
-}
-
+      // Show success
+      document.getElementById('bookingForm').classList.add('hidden');
+      document.getElementById('successMsg').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      showToast('Booking submitted! We\'ll be in touch shortly. 🌸', 'success');
+    })
+    .catch(error => {
+      console.error('Error saving booking:', error);
+      showToast('An error occurred while submitting your booking. Please try again.', 'error');
+    })
+};
 // ── Reset form ────────────────────────────────────────────────
 function resetForm() {
   document.getElementById('bookingForm').reset();
