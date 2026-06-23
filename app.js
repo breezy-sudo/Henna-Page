@@ -56,9 +56,9 @@ function submitBooking(e) {
   const hennaType = document.querySelector('input[name="hennaType"]:checked')?.value;
   const bodyArea = document.querySelector('input[name="bodyArea"]:checked')?.value;
   const location = document.querySelector('input[name="location"]:checked')?.value;
-  const homeAddress = document.getElementById('homeAddress')?.value.trim();
+  const homeAddress = document.getElementById('homeAddress')?.value.trim() || "";
   const payment = document.querySelector('input[name="payment"]:checked')?.value;
-  const notes = document.getElementById('clientNotes')?.value.trim();
+  const notes = document.getElementById('clientNotes').value.trim();
 
 
   if (!date || !time || !name || !phone || !hennaType || !bodyArea || !location || !payment) {
