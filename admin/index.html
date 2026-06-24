@@ -455,7 +455,7 @@
     <script>
         // ══════════════════════════════════════════
         // CHANGE THESE TO YOUR OWN LOGIN DETAILS
-        const ADMIN_USERNAME = '@meenah';
+        const ADMIN_USERNAME = 'meenah';
         const ADMIN_PASSWORD = 'derry123';
         // ══════════════════════════════════════════
 
@@ -497,47 +497,50 @@
             document.getElementById('dashboard').style.display = 'block';
             loadBookings();
         }
-
-        // ── Load Bookings ──
         function loadBookings() {
-            const bookings = JSON.parse(localStorage.getItem('meenahs_bookings') || '[]');
-            const list = document.getElementById('bookingsList');
 
-            // Update stats
-            document.getElementById('statTotal').textContent = bookings.length;
-            document.getElementById('statPending').textContent = bookings.filter(b => b.status === 'confirmed' || b.status === 'pending').length;
-            document.getElementById('statConfirmed').textContent = bookings.filter(b => b.status === 'approved').length;
-            document.getElementById('statRejected').textContent = bookings.filter(b => b.status === 'rejected').length;
+            // ── Load Bookings  from express server ──
+            fetch('http://localhost:7000/bookings')
+                .then(response => response.json())
+                .then(bookings => {
+                    const list = document.getElementById('bookingsList');
 
-            if (bookings.length === 0) {
-                list.innerHTML = `
+
+                    // Update stats
+                    document.getElementById('statTotal').textContent = bookings.length;
+                    document.getElementById('statPending').textContent = bookings.filter(b => b.status === 'confirmed' || b.status === 'pending').length;
+                    document.getElementById('statConfirmed').textContent = bookings.filter(b => b.status === 'approved').length;
+                    document.getElementById('statRejected').textContent = bookings.filter(b => b.status === 'rejected').length;
+
+                    if (bookings.length === 0) {
+                        list.innerHTML = `
           <div class="empty-state">
             <div class="icon">🌸</div>
             <p>No bookings yet. They'll show up here once customers start booking.</p>
           </div>`;
-                return;
-            }
+                        return;
+                    }
 
-            // Sort newest first
-            const sorted = [...bookings].reverse();
+                    // Sort newest first
+                    const sorted = [...bookings].reverse();
 
-            list.innerHTML = sorted.map((b, i) => {
-                const realIndex = bookings.length - 1 - i;
-                const status = b.status || 'pending';
-                const phone = b.client?.phone || '';
-                const cleanPhone = phone.replace(/\D/g, '');
+                    list.innerHTML = sorted.map((b, i) => {
+                        const realIndex = bookings.length - 1 - i;
+                        const status = b.status || 'pending';
+                        const phone = b.client?.phone || '';
+                        const cleanPhone = phone.replace(/\D/g, '');
 
-                // Pre-written WhatsApp confirm message
-                const confirmMsg = encodeURIComponent(
-                    `Hi ${b.client?.name || 'there'}, your Meenahs Henna Art appointment for ${b.appointment?.date} at ${b.appointment?.time} has been CONFIRMED! ✅🌸 We look forward to seeing you. For any questions, feel free to reply here or check our contact page.`
-                );
+                        // Pre-written WhatsApp confirm message
+                        const confirmMsg = encodeURIComponent(
+                            `Hi ${b.client?.name || 'there'}, your Meenahs Henna Art appointment for ${b.appointment?.date} at ${b.appointment?.time} has been CONFIRMED! ✅🌸 We look forward to seeing you. For any questions, feel free to reply here or check our contact page.`
+                        );
 
-                // Pre-written WhatsApp reject message
-                const rejectMsg = encodeURIComponent(
-                    `Hi ${b.client?.name || 'there'}, unfortunately your Meenahs Henna Art booking for ${b.appointment?.date} at ${b.appointment?.time} could not be confirmed at this time. ❌ Please contact us via WhatsApp or visit our contact page to reschedule. We're sorry for the inconvenience!`
-                );
+                        // Pre-written WhatsApp reject message
+                        const rejectMsg = encodeURIComponent(
+                            `Hi ${b.client?.name || 'there'}, unfortunately your Meenahs Henna Art booking for ${b.appointment?.date} at ${b.appointment?.time} could not be confirmed at this time. ❌ Please contact us via WhatsApp or visit our contact page to reschedule. We're sorry for the inconvenience!`
+                        );
 
-                return `
+                        return `
           <div class="booking-card ${status === 'approved' ? 'confirmed' : status === 'rejected' ? 'rejected' : 'pending'}" id="card-${realIndex}">
             <div>
               <div class="booking-id">${b.id || 'N/A'}</div>
@@ -569,15 +572,26 @@
               <button class="btn-delete" onclick="deleteBooking(${realIndex})">🗑 Delete</button>
             </div>
           </div>`;
-            }).join('');
+                    }).join('');
+                })
+                .catch(error => console.error('Error loading bookings:', error));
         }
 
         // ── Update Booking Status ──
-        function updateStatus(index, newStatus) {
-            const bookings = JSON.parse(localStorage.getItem('meenahs_bookings') || '[]');
-            bookings[index].status = newStatus;
-            localStorage.setItem('meenahs_bookings', JSON.stringify(bookings));
-            loadBookings();
+        function updateStatus(bookingId, newStatus) {
+            fetch(`http://localhost:7000/bookings/${bookingId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status: newStatus })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Status updated:', data);
+                    loadBookings();
+                })
+                .catch(error => console.error('Error updating status:', error));
         }
 
         // ── Delete Booking ──
