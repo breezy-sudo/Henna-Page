@@ -524,36 +524,34 @@
                     // Sort newest first
                     const sorted = [...bookings].reverse();
 
-                    list.innerHTML = sorted.map((b, i) => {
-                        const realIndex = bookings.length - 1 - i;
+                    list.innerHTML = sorted.map((b) => {
                         const status = b.status || 'pending';
-                        const phone = b.client?.phone || '';
+                        const phone = b.phone || '';
                         const cleanPhone = phone.replace(/\D/g, '');
 
                         // Pre-written WhatsApp confirm message
                         const confirmMsg = encodeURIComponent(
-                            `Hi ${b.client?.name || 'there'}, your Meenahs Henna Art appointment for ${b.appointment?.date} at ${b.appointment?.time} has been CONFIRMED! ✅🌸 We look forward to seeing you. For any questions, feel free to reply here or check our contact page.`
+                            `Hi ${b.name || 'there'}, your Meenahs Henna Art appointment for ${b.appointment?.date} at ${b.appointment?.time} has been CONFIRMED! ✅We look forward to seeing you. For any questions, feel free to reply here or check our contact page 🌸 .`
                         );
 
                         // Pre-written WhatsApp reject message
                         const rejectMsg = encodeURIComponent(
-                            `Hi ${b.client?.name || 'there'}, unfortunately your Meenahs Henna Art booking for ${b.appointment?.date} at ${b.appointment?.time} could not be confirmed at this time. ❌ Please contact us via WhatsApp or visit our contact page to reschedule. We're sorry for the inconvenience!`
+                            `Hi ${b.name || 'there'}, unfortunately your Meenahs Henna Art booking for ${b.appointment?.date} at ${b.appointment?.time} could not be confirmed at this time. ❌ Please contact us via WhatsApp or visit our contact page to reschedule. We're sorry for the inconvenience!`
                         );
 
                         return `
           <div class="booking-card ${status === 'approved' ? 'confirmed' : status === 'rejected' ? 'rejected' : 'pending'}" id="card-${realIndex}">
             <div>
               <div class="booking-id">${b.id || 'N/A'}</div>
-              <div class="client-name">${b.client?.name || 'Unknown'}</div>
+              <div class="client-name">${b.name || 'Unknown'}</div>
               <div class="booking-details">
-                <div class="detail-item">📅 <span>${b.appointment?.date || '-'}</span></div>
-                <div class="detail-item">🕐 <span>${b.appointment?.time || '-'}</span></div>
-                <div class="detail-item">📞 <span>${b.client?.phone || '-'}</span></div>
-                <div class="detail-item">📧 <span>${b.client?.email || '-'}</span></div>
-                <div class="detail-item">🌿 <span>${b.service?.hennaType || '-'}</span></div>
-                <div class="detail-item">🖐 <span>${b.service?.bodyArea || '-'}</span></div>
-                <div class="detail-item">📍 <span>${b.service?.location || '-'}</span></div>
-                <div class="detail-item">💳 <span>${b.service?.payment || '-'}</span></div>
+                <div class="detail-item">🕐 <span>${b.time || '-'}</span></div>
+                <div class="detail-item">📞 <span>${b.phone || '-'}</span></div>
+                <div class="detail-item">📧 <span>${b.email || '-'}</span></div>
+                <div class="detail-item">🌿 <span>${b.hennaType || '-'}</span></div>
+                <div class="detail-item">🖐 <span>${b.bodyArea || '-'}</span></div>
+                <div class="detail-item">📍 <span>${b.location || '-'}</span></div>
+                <div class="detail-item">💳 <span>${b.payment || '-'}</span></div>
                 ${b.notes ? `<div class="detail-item">📝 <span>${b.notes}</span></div>` : ''}
               </div>
             </div>
@@ -562,14 +560,14 @@
                 ${status === 'approved' ? 'Confirmed' : status === 'rejected' ? 'Rejected' : 'Pending'}
               </span>
               <div class="action-btns">
-                <button class="btn-confirm" onclick="updateStatus(${realIndex}, 'approved')">✓ Confirm</button>
-                <button class="btn-reject" onclick="updateStatus(${realIndex}, 'rejected')">✗ Reject</button>
+                <button class="btn-confirm" onclick="updateStatus(${b.id}, 'approved')">✓ Confirm</button>
+                <button class="btn-reject" onclick="updateStatus(${b.id}, 'rejected')">✗ Reject</button>
               </div>
               <div class="action-btns">
                 <a class="btn-whatsapp" href="https://wa.me/${cleanPhone}?text=${confirmMsg}" target="_blank">💬 Send Confirm</a>
                 <a class="btn-whatsapp" href="https://wa.me/${cleanPhone}?text=${rejectMsg}" target="_blank" style="background:#e67e22">💬 Send Reject</a>
               </div>
-              <button class="btn-delete" onclick="deleteBooking(${realIndex})">🗑 Delete</button>
+              <button class="btn-delete" onclick="deleteBooking(${b.id})">🗑 Delete</button>
             </div>
           </div>`;
                     }).join('');
@@ -595,12 +593,22 @@
         }
 
         // ── Delete Booking ──
-        function deleteBooking(index) {
-            if (!confirm('Are you sure you want to delete this booking?')) return;
-            const bookings = JSON.parse(localStorage.getItem('meenahs_bookings') || '[]');
-            bookings.splice(index, 1);
-            localStorage.setItem('meenahs_bookings', JSON.stringify(bookings));
-            loadBookings();
+        function deleteBooking(bookingId) {
+            if (!confirm('Are you sure you want to delete this booking? This action cannot be undone.')) {
+                return;
+            }
+            fetch(`http://localhost:7000/bookings/${bookingId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('✅Booking deleted:', data);
+                    loadBookings();
+                })
+                .catch(error => console.error('❌Error deleting booking:', error));
         }
     </script>
 
