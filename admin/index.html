@@ -540,7 +540,7 @@
                         );
 
                         return `
-          <div class="booking-card ${status === 'approved' ? 'confirmed' : status === 'rejected' ? 'rejected' : 'pending'}" id="card-${realIndex}">
+          <div class="booking-card ${status === 'approved' ? 'confirmed' : status === 'rejected' ? 'rejected' : 'pending'}" id="card-${b.id}">
             <div>
               <div class="booking-id">${b.id || 'N/A'}</div>
               <div class="client-name">${b.name || 'Unknown'}</div>
