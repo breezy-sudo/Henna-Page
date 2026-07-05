@@ -499,7 +499,7 @@
             loadBookings();
         }
         function loadBookings() {
-            allBookings = bokings;
+            allBookings = bookings;
             console.log('Loaded bookings:', allBookings);
             // ── Load Bookings  from express server ──
             fetch('http://localhost:7000/bookings')
