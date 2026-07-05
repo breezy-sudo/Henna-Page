@@ -560,6 +560,7 @@
                 ${status === 'approved' ? 'Confirmed' : status === 'rejected' ? 'Rejected' : 'Pending'}
               </span>
               <div class="action-btns">
+                console.log('Updating status for booking:', ${b.id});
                 <button class="btn-confirm" onclick="updateStatus(${b.id}, 'approved')">✓ Confirm</button>
                 <button class="btn-reject" onclick="updateStatus(${b.id}, 'rejected')">✗ Reject</button>
               </div>
