@@ -453,6 +453,7 @@
     </div>
 
     <script>
+        let allBookings = [];
         // ══════════════════════════════════════════
         // CHANGE THESE TO YOUR OWN LOGIN DETAILS
         const ADMIN_USERNAME = 'meenah';
@@ -498,7 +499,8 @@
             loadBookings();
         }
         function loadBookings() {
-
+            allBookings = bokings;
+            console.log('Loaded bookings:', allBookings);
             // ── Load Bookings  from express server ──
             fetch('http://localhost:7000/bookings')
                 .then(response => response.json())
