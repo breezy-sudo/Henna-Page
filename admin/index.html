@@ -564,9 +564,9 @@
                 ${status === 'approved' ? 'Confirmed' : status === 'rejected' ? 'Rejected' : 'Pending'}
               </span>
               <div class="action-btns">
-                
-                <button class="btn-confirm" onclick="updateStatus(${b._id}, 'approved')">✓ Confirm</button>
-                <button class="btn-reject" onclick="updateStatus(${b._id}, 'rejected')">✗ Reject</button>
+            
+                <button class="btn-confirm" data-id="${b._id}" data-status ="approved">✓ Confirm</button>
+                <button class="btn-reject" data-id="${b._id}" data-status="rejected">✗ Reject</button>
               </div>
               <div class="action-btns">
                 <a class="btn-whatsapp" href="https://wa.me/${cleanPhone}?text=${confirmMsg}" target="_blank">💬 Send Confirm</a>
@@ -576,6 +576,13 @@
             </div>
           </div>`;
                     }).join('');
+                    document.querySelectorAll('.btn-confirm, .btn-reject').forEach(btn => {
+                        btn.addEventListener('click', function () {
+                            const bookingId = this.dataset.id;
+                            const status = this.dataset.status;
+                            updateStatus(bookingId, status);
+                        });
+                    });
                 })
                 .catch(error => console.error('Error loading bookings:', error));
         }
