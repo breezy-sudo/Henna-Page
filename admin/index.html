@@ -572,7 +572,7 @@
                 <a class="btn-whatsapp" href="https://wa.me/${cleanPhone}?text=${confirmMsg}" target="_blank">💬 Send Confirm</a>
                 <a class="btn-whatsapp" href="https://wa.me/${cleanPhone}?text=${rejectMsg}" target="_blank" style="background:#e67e22">💬 Send Reject</a>
               </div>
-              <button class="btn-delete" onclick="deleteBooking(${b._id})">🗑 Delete</button>
+              <button class="btn-delete" data-id="${b._id}">🗑 Delete</button>
             </div>
           </div>`;
                     }).join('');
@@ -581,6 +581,12 @@
                             const bookingId = this.dataset.id;
                             const status = this.dataset.status;
                             updateStatus(bookingId, status);
+                        });
+                    });
+                    document.querySelectorAll('.btn-delete').forEach(btn => {
+                        btn.addEventListener('click', function () {
+                            const bookingId = this.dataset.id;
+                            deleteBooking(bookingId);
                         });
                     });
                 })
