@@ -499,12 +499,14 @@
             loadBookings();
         }
         function loadBookings() {
-            allBookings = bookings;
-            console.log('Loaded bookings:', allBookings);
+
             // ── Load Bookings  from express server ──
             fetch('http://localhost:7000/bookings')
                 .then(response => response.json())
                 .then(bookings => {
+                    allBookings = bookings;
+                    console.log('Loaded bookings:', allBookings);
+
                     const list = document.getElementById('bookingsList');
 
 
@@ -533,18 +535,18 @@
 
                         // Pre-written WhatsApp confirm message
                         const confirmMsg = encodeURIComponent(
-                            `Hi ${b.name || 'there'}, your Meenahs Henna Art appointment for ${b.appointment?.date} at ${b.appointment?.time} has been CONFIRMED! ✅We look forward to seeing you. For any questions, feel free to reply here or check our contact page 🌸 .`
+                            `Hi ${b.name || 'there'}, your Meenahs Henna Art appointment for ${b.date} at ${b.time} has been CONFIRMED! ✅We look forward to seeing you. For any questions, feel free to reply here or check our contact page 🌸 .`
                         );
 
                         // Pre-written WhatsApp reject message
                         const rejectMsg = encodeURIComponent(
-                            `Hi ${b.name || 'there'}, unfortunately your Meenahs Henna Art booking for ${b.appointment?.date} at ${b.appointment?.time} could not be confirmed at this time. ❌ Please contact us via WhatsApp or visit our contact page to reschedule. We're sorry for the inconvenience!`
+                            `Hi ${b.name || 'there'}, unfortunately your Meenahs Henna Art booking for ${b.date} at ${b.time} could not be confirmed at this time. ❌ Please contact us via WhatsApp or visit our contact page to reschedule. We're sorry for the inconvenience!`
                         );
 
                         return `
-          <div class="booking-card ${status === 'approved' ? 'confirmed' : status === 'rejected' ? 'rejected' : 'pending'}" id="card-${b.id}">
+          <div class="booking-card ${status === 'approved' ? 'confirmed' : status === 'rejected' ? 'rejected' : 'pending'}" id="card-${b._id}">
             <div>
-              <div class="booking-id">${b.id || 'N/A'}</div>
+              <div class="booking-id">${b._id || 'N/A'}</div>
               <div class="client-name">${b.name || 'Unknown'}</div>
               <div class="booking-details">
                 <div class="detail-item">🕐 <span>${b.time || '-'}</span></div>
@@ -562,15 +564,15 @@
                 ${status === 'approved' ? 'Confirmed' : status === 'rejected' ? 'Rejected' : 'Pending'}
               </span>
               <div class="action-btns">
-                console.log('Updating status for booking:', ${b.id});
-                <button class="btn-confirm" onclick="updateStatus(${b.id}, 'approved')">✓ Confirm</button>
-                <button class="btn-reject" onclick="updateStatus(${b.id}, 'rejected')">✗ Reject</button>
+                
+                <button class="btn-confirm" onclick="updateStatus(${b._id}, 'approved')">✓ Confirm</button>
+                <button class="btn-reject" onclick="updateStatus(${b._id}, 'rejected')">✗ Reject</button>
               </div>
               <div class="action-btns">
                 <a class="btn-whatsapp" href="https://wa.me/${cleanPhone}?text=${confirmMsg}" target="_blank">💬 Send Confirm</a>
                 <a class="btn-whatsapp" href="https://wa.me/${cleanPhone}?text=${rejectMsg}" target="_blank" style="background:#e67e22">💬 Send Reject</a>
               </div>
-              <button class="btn-delete" onclick="deleteBooking(${b.id})">🗑 Delete</button>
+              <button class="btn-delete" onclick="deleteBooking(${b._id})">🗑 Delete</button>
             </div>
           </div>`;
                     }).join('');
