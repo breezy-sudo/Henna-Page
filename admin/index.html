@@ -456,8 +456,11 @@
         let allBookings = [];
         // ══════════════════════════════════════════
         // CHANGE THESE TO YOUR OWN LOGIN DETAILS
-        const ADMIN_USERNAME = 'meenah';
+        const ADMIN_USERNAME = 'Ameenah';
         const ADMIN_PASSWORD = 'derry123';
+        const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+            ? 'http://localhost:7000'
+            : 'https://meenahs-server-production.up.railway.app';
         // ══════════════════════════════════════════
 
         // ── Check if already logged in ──
@@ -501,7 +504,7 @@
         function loadBookings() {
 
             // ── Load Bookings  from express server ──
-            fetch('https://meenahs-server-production.up.railway.app/bookings')
+            fetch(`${API_BASE}/bookings`)
                 .then(response => response.json())
                 .then(bookings => {
                     allBookings = bookings;
@@ -595,7 +598,7 @@
 
         // ── Update Booking Status ──
         function updateStatus(bookingId, newStatus) {
-            fetch(`http://localhost:7000/bookings/${bookingId}`, {
+            fetch(`${API_BASE}/bookings/${bookingId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json'
@@ -615,7 +618,7 @@
             if (!confirm('Are you sure you want to delete this booking? This action cannot be undone.')) {
                 return;
             }
-            fetch(`http://localhost:7000/bookings/${bookingId}`, {
+            fetch(`${API_BASE}/bookings/${bookingId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'

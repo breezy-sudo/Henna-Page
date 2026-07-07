@@ -46,6 +46,10 @@ document.querySelectorAll('input[name="location"]').forEach(radio => {
 });
 
 // ── Booking Form Submit ───────────────────────────────────────
+const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+  ? 'http://localhost:7000'
+  : 'https://meenahs-server-production.up.railway.app';
+
 function submitBooking(e) {
   e.preventDefault();
 
@@ -83,7 +87,7 @@ function submitBooking(e) {
   showToast('Saving your booking....🌸', 'success');
 
   // Sendin to express server
-  fetch('https://meenahs-server-production.up.railway.app/bookings', {
+  fetch(`${API_BASE}/bookings`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
