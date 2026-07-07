@@ -83,7 +83,7 @@ function submitBooking(e) {
   showToast('Saving your booking....🌸', 'success');
 
   // Sendin to express server
-  fetch('http://localhost:7000/bookings', {
+  fetch('https://meenahs-server-production.up.railway.app/bookings', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

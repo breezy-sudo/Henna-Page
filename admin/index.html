@@ -501,7 +501,7 @@
         function loadBookings() {
 
             // ── Load Bookings  from express server ──
-            fetch('http://localhost:7000/bookings')
+            fetch('https://meenahs-server-production.up.railway.app/')
                 .then(response => response.json())
                 .then(bookings => {
                     allBookings = bookings;
