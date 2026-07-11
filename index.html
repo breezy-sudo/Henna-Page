@@ -86,7 +86,7 @@
           <div class="card-label"><span class="step-num">02</span> What type of henna do you prefer?</div>
           <div class="option-grid">
             <label class="option-card">
-              <input type="radio" name="hennaType" value="local" required />
+              <input type="checkbox" name="hennaType" value="local" required />
               <div class="option-inner">
                 <span class="option-icon">🌿</span>
                 <span class="option-name">Local Henna</span>
@@ -94,7 +94,7 @@
               </div>
             </label>
             <label class="option-card">
-              <input type="radio" name="hennaType" value="black" />
+              <input type="checkbox" name="hennaType" value="black" />
               <div class="option-inner">
                 <span class="option-icon">🖤</span>
                 <span class="option-name">Black Henna</span>
@@ -102,7 +102,7 @@
               </div>
             </label>
             <label class="option-card">
-              <input type="radio" name="hennaType" value="bridal" />
+              <input type="checkbox" name="hennaType" value="bridal" />
               <div class="option-inner">
                 <span class="option-icon">👑</span>
                 <span class="option-name">Bridal Henna</span>
@@ -110,7 +110,7 @@
               </div>
             </label>
             <label class="option-card">
-              <input type="radio" name="hennaType" value="mix" />
+              <input type="checkbox" name="hennaType" value="mix" />
               <div class="option-inner">
                 <span class="option-icon">✨</span>
                 <span class="option-name">Mix / Custom</span>
@@ -125,7 +125,7 @@
           <div class="card-label"><span class="step-num">03</span> Which area would you like decorated?</div>
           <div class="option-grid">
             <label class="option-card">
-              <input type="radio" name="bodyArea" value="hands" required />
+              <input type="checkbox" name="bodyArea" value="hands" required />
               <div class="option-inner">
                 <span class="option-icon">🤲</span>
                 <span class="option-name">Hands Only</span>
@@ -133,7 +133,7 @@
               </div>
             </label>
             <label class="option-card">
-              <input type="radio" name="bodyArea" value="feet" />
+              <input type="checkbox" name="bodyArea" value="feet" />
               <div class="option-inner">
                 <span class="option-icon">🦶</span>
                 <span class="option-name">Feet Only</span>
@@ -141,7 +141,7 @@
               </div>
             </label>
             <label class="option-card">
-              <input type="radio" name="bodyArea" value="hands_feet" />
+              <input type="checkbox" name="bodyArea" value="hands_feet" />
               <div class="option-inner">
                 <span class="option-icon">🌸</span>
                 <span class="option-name">Hands & Feet</span>
@@ -149,12 +149,20 @@
               </div>
             </label>
             <label class="option-card">
-              <input type="radio" name="bodyArea" value="palms" />
+              <input type="checkbox" name="bodyArea" value="palms" />
               <div class="option-inner">
                 <span class="option-icon">🖐</span>
                 <span class="option-name">Palms Only</span>
                 <span class="option-desc">Palm designs</span>
               </div>
+            </label>
+            label class="option-card">
+            <input type="checkbox" name="bodyArea" value="shoulder_collarbone" />
+            <div class="option-inner">
+              <span class="option-icon">🌸</span>
+              <span class="option-name">Shoulder & Collarbone</span>
+              <span class="option-desc">Shoulder shimmer & collar crown</span>
+            </div>
             </label>
           </div>
         </div>
@@ -267,32 +275,10 @@
         <div class="divider"><span>❧</span></div>
       </div>
       <div class="gallery-grid">
-        <div class="gallery-item g-tall gallery-bridal-full-set">
-          <div class="gallery-label">Bridal Full Set</div>
-        </div>
-        <div class="gallery-item gallery-hand-mandala">
-          <div class="gallery-label">Hand Mandala</div>
-        </div>
-        <div class="gallery-item gallery-black-henna">
-          <div class="gallery-label">Black Henna</div>
-        </div>
-        <div class="gallery-item g-wide gallery-bridal-feet">
-          <div class="gallery-label">Bridal Feet Design</div>
-        </div>
-        <div class="gallery-item gallery-palm-florals">
-          <div class="gallery-label">Palm Florals</div>
-        </div>
-        <div class="gallery-item gallery-mix-design">
-          <div class="gallery-label">Mix Design</div>
-        </div>
-
-        <div class="gallery-item gallery-tattoo-inspired">
-          <div class="gallery-label">Tattoo-Inspired</div>
-        </div>
-      </div>
-      <p class="gallery-note">📸 Follow us on Instagram <strong>@meenahs henna art</strong> and Tiktok
-        <strong>_Meenahs_henna_art</strong> for daily inspiration
-      </p>
+        </ Gallery images will be dynamically inserted here by app.js </div>
+        <p class="gallery-note">📸 Follow us on Instagram <strong>@meenahs henna art</strong> and Tiktok
+          <strong>_Meenahs_henna_art</strong> for daily inspiration
+        </p>
     </section>
 
     <!-- ===== ABOUT PAGE ===== -->

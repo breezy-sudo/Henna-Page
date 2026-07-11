@@ -45,6 +45,104 @@ document.querySelectorAll('input[name="location"]').forEach(radio => {
   });
 });
 
+// ── Gallery Data ───────────────────────────────────────────────
+// To add a new design to an existing category: add a filename to that
+// category's `images` array.
+// To add a whole new category: add a new object to this array with a
+// unique `id`, a `label`, and an `images` array (first image is the cover).
+const galleryData = [
+  {
+    id: 'bridal-full-set',
+    label: 'Bridal Full Set',
+    images: [
+      'WhatsApp Image 2026-05-30 at 23.48.35.jpeg'
+    ]
+  },
+  {
+    id: 'hand-mandala',
+    label: 'Hand Mandala',
+    images: [
+      'WhatsApp Image 2026-05-30 at 23.48.31.jpeg'
+    ]
+  },
+  {
+    id: 'black-henna',
+    label: 'Black Henna',
+    images: [
+      'WhatsApp Image 2026-05-30 at 23.48.34.jpeg'
+    ]
+  },
+  {
+    id: 'bridal-feet',
+    label: 'Bridal Feet Design',
+    images: [
+      'WhatsApp Image 2026-05-30 at 23.48.36.jpeg'
+    ]
+  },
+  {
+    id: 'palm-florals',
+    label: 'Palm Florals',
+    images: [
+      'WhatsApp Image 2026-05-31 at 12.40.38.jpeg'
+    ]
+  },
+  {
+    id: 'mix-design',
+    label: 'Mix Design',
+    images: [
+      'WhatsApp Image 2026-05-30 at 23.48.33.jpeg'
+    ]
+  },
+  {
+    id: 'tattoo-inspired',
+    label: 'Tattoo-Inspired',
+    images: [
+      'WhatsApp Image 2026-05-30 at 23.48.32.jpeg'
+    ]
+  }
+];
+
+let expandedGalleryId = null;
+
+function renderGallery() {
+  const grid = document.getElementById('galleryGrid');
+  if (!grid) return;
+
+  grid.innerHTML = '';
+
+  galleryData.forEach(category => {
+    const tile = document.createElement('div');
+    tile.className = 'gallery-item' + (category.id === expandedGalleryId ? ' active' : '');
+    tile.style.backgroundImage = `url("${category.images[0]}")`;
+    tile.style.backgroundSize = 'cover';
+    tile.style.backgroundPosition = 'center';
+
+    const countTag = category.images.length > 1 ? ` (${category.images.length})` : '';
+    tile.innerHTML = `<div class="gallery-label">${category.label}${countTag}</div>`;
+
+    tile.addEventListener('click', () => {
+      expandedGalleryId = (expandedGalleryId === category.id) ? null : category.id;
+      renderGallery();
+    });
+
+    grid.appendChild(tile);
+
+    if (category.id === expandedGalleryId) {
+      const expandRow = document.createElement('div');
+      expandRow.className = 'gallery-expand-row';
+      category.images.forEach(imgSrc => {
+        const sub = document.createElement('div');
+        sub.className = 'gallery-sub-item';
+        sub.style.backgroundImage = `url("${imgSrc}")`;
+        expandRow.appendChild(sub);
+      });
+      grid.appendChild(expandRow);
+    }
+  });
+}
+
+renderGallery();
+
 // ── Booking Form Submit ───────────────────────────────────────
 const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
   ? 'http://localhost:7000'
