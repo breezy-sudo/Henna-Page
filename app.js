@@ -155,8 +155,8 @@ function submitBooking(e) {
   const time = document.getElementById('bookTime').value;
   const name = document.getElementById('clientName').value.trim();
   const phone = document.getElementById('clientPhone').value.trim();
-  const hennaType = document.querySelector('input[name="hennaType"]:checked')?.value;
-  const bodyArea = document.querySelector('input[name="bodyArea"]:checked')?.value;
+  const hennaType = Array.from(document.querySelectorAll('input[name="hennaType"]:checked')).map(el => el.value);
+  const bodyArea = Array.from(document.querySelectorAll('input[name="bodyArea"]:checked')).map(el => el.value);
   const location = document.querySelector('input[name="location"]:checked')?.value;
   const homeAddress = document.getElementById('homeAddress')?.value.trim() || "";
   const payment = document.querySelector('input[name="payment"]:checked')?.value;
