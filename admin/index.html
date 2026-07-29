@@ -501,16 +501,22 @@
         let allBookings = [];
         // ══════════════════════════════════════════
         // CHANGE THESE TO YOUR OWN LOGIN DETAILS
-        const ADMIN_USERNAME = 'Ameenah';
-        const ADMIN_PASSWORD = 'derry123';
+
         const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
             ? 'http://localhost:7000'
             : 'https://meenahs-server-production.up.railway.app';
         // ══════════════════════════════════════════
 
         // ── Check if already logged in ──
-        if (sessionStorage.getItem('meenahs_admin') === 'true') {
+        if (sessionStorage.getItem('meenahs_admin_token')) {
             showDashboard();
+        }
+        // ── Helper: headers for any request that needs admin auth ──
+        function authHeaders() {
+            return {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${sessionStorage.getItem('meenahs_admin_token')}`
+            };
         }
 
         // ── Login ──
@@ -518,24 +524,27 @@
             const username = document.getElementById('usernameInput').value.trim();
             const password = document.getElementById('passwordInput').value;
 
-            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-                sessionStorage.setItem('meenahs_admin', 'true');
-                document.getElementById('loginError').style.display = 'none';
-                showDashboard();
-            } else {
-                document.getElementById('loginError').style.display = 'block';
-                document.getElementById('passwordInput').value = '';
-            }
+            fetch(`${API_BASE}/admin/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error('Invalid login');
+                    return response.json();
+                })
+                .then(data => {
+                    sessionStorage.setItem('meenahs_admin_token', data.token);
+                    document.getElementById('loginError').style.display = 'none';
+                    showDashboard();
+                })
+                .catch(() => {
+                    document.getElementById('loginError').style.display = 'block';
+                    document.getElementById('passwordInput').value = '';
+                });
         }
-
-        // Allow pressing Enter to login
-        document.getElementById('passwordInput').addEventListener('keydown', e => {
-            if (e.key === 'Enter') adminLogin();
-        });
-
-        // ── Logout ──
         function adminLogout() {
-            sessionStorage.removeItem('meenahs_admin');
+            sessionStorage.removeItem('meenahs_admin_token');
             document.getElementById('dashboard').style.display = 'none';
             document.getElementById('loginScreen').style.display = 'flex';
         }
@@ -549,11 +558,19 @@
         function loadBookings() {
 
             // ── Load Bookings  from express server ──
-            fetch(`${API_BASE}/bookings`)
-                .then(response => response.json())
+            fetch(`${API_BASE}/bookings`, { headers: authHeaders() })
+                .then(response => {
+                    if (response.status === 401) {
+                        adminLogout();
+                        throw new Error('Session expired, please log in again');
+                    }
+                    return response.json();
+                })
                 .then(bookings => {
                     allBookings = bookings;
-                    console.log('Loaded bookings:', allBookings);
+                    console.log('Loaded bookings:', allBookings
+
+                    );
 
                     const list = document.getElementById('bookingsList');
 
