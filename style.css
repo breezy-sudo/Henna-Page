@@ -437,6 +437,234 @@ body {
   border-color: var(--terra-dark);
 }
 
+/* ── Henna Type Accordion (type + body area combined) ── */
+.henna-accordion {
+  margin-bottom: 0.9rem;
+}
+
+.henna-accordion__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.35rem;
+  width: 100%;
+  padding: 1rem 0.6rem;
+  background: var(--cream);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  position: relative;
+  transition: all 0.2s;
+}
+
+.henna-accordion__header.open {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: none;
+  padding-bottom: 0.65rem;
+}
+
+.henna-accordion:hover .henna-accordion__header {
+  border-color: var(--amber-light);
+  transform: translateY(-2px);
+}
+
+.henna-accordion.has-selection .henna-accordion__header {
+  border-color: var(--amber);
+  background: linear-gradient(135deg, #fff8ee, #fff3e0);
+  box-shadow: 0 4px 16px rgba(196, 136, 42, 0.18);
+}
+
+.henna-accordion__icon {
+  font-size: 1.6rem;
+}
+
+.henna-accordion__name {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--terra-dark);
+}
+
+.henna-accordion__badge {
+  font-size: 0.65rem;
+  color: var(--text-light);
+  min-height: 0.9em;
+}
+
+.henna-accordion.has-selection .henna-accordion__badge {
+  color: var(--amber);
+  font-weight: 600;
+}
+
+.henna-accordion__chevron {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.8rem;
+  font-size: 0.85rem;
+  color: var(--text-light);
+  transition: transform 0.25s;
+}
+
+.henna-accordion__badge {
+  font-size: 0.7rem;
+  color: var(--amber);
+  font-weight: 600;
+  margin-right: 0.3rem;
+}
+
+.henna-accordion__chevron {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  transition: transform 0.25s;
+}
+
+.henna-accordion__header.open .henna-accordion__chevron {
+  transform: rotate(180deg);
+}
+
+.henna-accordion__body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  padding: 0 1.1rem;
+}
+
+.henna-accordion__body.open {
+  max-height: 600px;
+  padding: 0 1.1rem 1rem;
+  border: 2px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+}
+
+.henna-accordion.has-selection .henna-accordion__body.open {
+  border-color: var(--amber);
+}
+
+.pair-row {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.6rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.pair-row:first-child {
+  border-top: none;
+}
+
+.pair-row__icon {
+  font-size: 1.1rem;
+}
+
+.pair-row__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.pair-row__name {
+  font-size: 0.78rem;
+  color: var(--text);
+}
+
+.pair-row__price {
+  font-size: 0.7rem;
+  color: var(--text-light);
+}
+
+.pair-row.added .pair-row__price {
+  color: var(--amber);
+  font-weight: 600;
+}
+
+.pair-toggle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid var(--amber);
+  background: var(--cream);
+  color: var(--amber);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.pair-toggle.added {
+  background: var(--terra-dark);
+  border-color: var(--terra-dark);
+  color: var(--cream);
+}
+
+.pair-toggle:hover {
+  transform: scale(1.08);
+}
+
+/* ── Price Summary ── */
+.price-summary {
+  margin-top: 1rem;
+  padding: 1rem 1.2rem;
+  background: linear-gradient(135deg, #fff8ee, #fff3e0);
+  border: 1px solid var(--amber-light);
+  border-radius: 12px;
+}
+
+.price-summary__title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--terra-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.price-summary__empty {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  font-style: italic;
+}
+
+.price-summary__line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--text-mid);
+  padding: 0.2rem 0;
+}
+
+.price-summary__total {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--amber-light);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--terra-dark);
+}
+
+/* ── Distance band (home service only) ── */
+.distance-band-field {
+  margin-top: 1rem;
+}
+
+.distance-band-field select {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  background: var(--cream);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  color: var(--text);
+}
+
+
+
 /* ── Success Message ── */
 .success-msg {
   text-align: center;

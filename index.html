@@ -83,91 +83,182 @@
 
         <!-- Step 2: Henna Type -->
         <div class="form-card">
-          <div class="card-label"><span class="step-num">02</span> What type of henna do you prefer?</div>
-          <div class="option-grid">
-            <label class="option-card">
-              <input type="checkbox" name="hennaType" value="local" />
-              <div class="option-inner">
-                <span class="option-icon">🌿</span>
-                <span class="option-name">Local Henna</span>
-                <span class="option-desc">Natural traditional paste</span>
+          <div class="card-label"><span class="step-num">02</span> Choose your henna type, then add the areas you'd like
+            decorated</div>
+
+          <div class="henna-accordion" id="accordion-local">
+            <button type="button" class="henna-accordion__header" onclick="toggleAccordion('local')">
+              <span class="henna-accordion__icon">🌿</span>
+              <span class="henna-accordion__name">Local Henna</span>
+              <span class="henna-accordion__badge" id="badge-local"></span>
+              <span class="henna-accordion__chevron">⌄</span>
+            </button>
+            <div class="henna-accordion__body" id="body-local">
+              <div class="pair-row" data-henna="local" data-area="hands">
+                <span class="pair-row__icon">🤲</span>
+                <div class="pair-row__info">
+                  <span class="pair-row__name">Hands Only</span>
+                  <span class="pair-row__price" id="price-local-hands"></span>
+                </div>
+                <button type="button" class="pair-toggle" onclick="togglePair('local','hands')">+</button>
               </div>
-            </label>
-            <label class="option-card">
-              <input type="checkbox" name="hennaType" value="black" />
-              <div class="option-inner">
-                <span class="option-icon">🖤</span>
-                <span class="option-name">Black Henna</span>
-                <span class="option-desc">Bold, striking designs</span>
+              <div class="pair-row" data-henna="local" data-area="feet">
+                <span class="pair-row__icon">🦶</span>
+                <div class="pair-row__info">
+                  <span class="pair-row__name">Feet Only</span>
+                  <span class="pair-row__price" id="price-local-feet"></span>
+                </div>
+                <button type="button" class="pair-toggle" onclick="togglePair('local','feet')">+</button>
               </div>
-            </label>
-            <label class="option-card">
-              <input type="checkbox" name="hennaType" value="bridal" />
-              <div class="option-inner">
-                <span class="option-icon">👑</span>
-                <span class="option-name">Bridal Henna</span>
-                <span class="option-desc">Elaborate bridal artistry</span>
+              <div class="pair-row" data-henna="local" data-area="hands_feet">
+                <span class="pair-row__icon">🌸</span>
+                <div class="pair-row__info">
+                  <span class="pair-row__name">Hands & Feet</span>
+                  <span class="pair-row__price" id="price-local-hands_feet"></span>
+                </div>
+                <button type="button" class="pair-toggle" onclick="togglePair('local','hands_feet')">+</button>
               </div>
-            </label>
-            <label class="option-card">
-              <input type="checkbox" name="hennaType" value="mix" />
-              <div class="option-inner">
-                <span class="option-icon">✨</span>
-                <span class="option-name">Mix / Custom</span>
-                <span class="option-desc">Blend of styles</span>
+              <div class="pair-row" data-henna="local" data-area="palms">
+                <span class="pair-row__icon">🖐</span>
+                <div class="pair-row__info">
+                  <span class="pair-row__name">Palms Only</span>
+                  <span class="pair-row__price" id="price-local-palms"></span>
+                </div>
+                <button type="button" class="pair-toggle" onclick="togglePair('local','palms')">+</button>
               </div>
-            </label>
+              <div class="pair-row" data-henna="local" data-area="shoulder_collarbone">
+                <span class="pair-row__icon">🌸</span>
+                <div class="pair-row__info">
+                  <span class="pair-row__name">Shoulder & Collarbone</span>
+                  <span class="pair-row__price" id="price-local-shoulder_collarbone"></span>
+                </div>
+                <button type="button" class="pair-toggle" onclick="togglePair('local','shoulder_collarbone')">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="henna-accordion" id="accordion-black">
+            <button type="button" class="henna-accordion__header" onclick="toggleAccordion('black')">
+              <span class="henna-accordion__icon">🖤</span>
+              <span class="henna-accordion__name">Black Henna</span>
+              <span class="henna-accordion__badge" id="badge-black"></span>
+              <span class="henna-accordion__chevron">⌄</span>
+            </button>
+            <div class="henna-accordion__body" id="body-black">
+              <div class="pair-row" data-henna="black" data-area="hands">
+                <span class="pair-row__icon">🤲</span>
+                <div class="pair-row__info">
+                  <span class="pair-row__name">Hands Only</span>
+                  <span class="pair-row__price" id="price-black-hands"></span>
+                </div>
+                <button type="button" class="pair-toggle" onclick="togglePair('black','hands')">+</button>
+              </div>
+              <div class="pair-row" data-henna="black" data-area="feet">
+                <span class="pair-row__icon">🦶</span>
+                <div class="pair-row__info">
+                  <span class="pair-row__name">Feet Only</span>
+                  <span class="pair-row__price" id="price-black-feet"></span>
+                </div>
+                <button type="button" class="pair-toggle" onclick="togglePair('black','feet')">+</button>
+              </div>
+              <div class="pair-row" data-henna="black" data-area="hands_feet">
+                <span class="pair-row__icon">🌸</span>
+                <div class="pair-row__info">
+                  <span class="pair-row__name">Hands & Feet</span>
+                  <span class="pair-row__price" id="price-black-hands_feet"></span>
+                </div>
+                <button type="button" class="pair-toggle" onclick="togglePair('black','hands_feet')">+</button>
+              </div>
+              <div class="pair-row" data-henna="black" data-area="palms">
+                <span class="pair-row__icon">🖐</span>
+                <div class="pair-row__info">
+                  <span class="pair-row__name">Palms Only</span>
+                  <span class="pair-row__price" id="price-black-palms"></span>
+                </div>
+                <button type="button" class="pair-toggle" onclick="togglePair('black','palms')">+</button>
+              </div>
+              <div class="pair-row" data-henna="black" data-area="shoulder_collarbone">
+                <span class="pair-row__icon">🌸</span>
+                <div class="pair-row__info">
+                  <span class="pair-row__name">Shoulder & Collarbone</span>
+                  <span class="pair-row__price" id="price-black-shoulder_collarbone"></span>
+                </div>
+                <button type="button" class="pair-toggle" onclick="togglePair('black','shoulder_collarbone')">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="henna-accordion" id="accordion-mix">
+            <button type="button" class="henna-accordion__header" onclick="toggleAccordion('mix')">
+              <span class="henna-accordion__icon">✨</span>
+              <span class="henna-accordion__name">Mix / Custom</span>
+              <span class="henna-accordion__badge" id="badge-mix"></span>
+              <span class="henna-accordion__chevron">⌄</span>
+            </button>
+            <div class="henna-accordion__body" id="body-mix">
+              <div class="pair-row" data-henna="mix" data-area="hands">
+                <span class="pair-row__icon">🤲</span>
+                <div class="pair-row__info">
+                  <span class="pair-row__name">Hands Only</span>
+                  <span class="pair-row__price" id="price-mix-hands"></span>
+                </div>
+                <button type="button" class="pair-toggle" onclick="togglePair('mix','hands')">+</button>
+              </div>
+              <div class="pair-row" data-henna="mix" data-area="feet">
+                <span class="pair-row__icon">🦶</span>
+                <div class="pair-row__info">
+                  <span class="pair-row__name">Feet Only</span>
+                  <span class="pair-row__price" id="price-mix-feet"></span>
+                </div>
+                <button type="button" class="pair-toggle" onclick="togglePair('mix','feet')">+</button>
+              </div>
+              <div class="pair-row" data-henna="mix" data-area="hands_feet">
+                <span class="pair-row__icon">🌸</span>
+                <div class="pair-row__info">
+                  <span class="pair-row__name">Hands & Feet</span>
+                  <span class="pair-row__price" id="price-mix-hands_feet"></span>
+                </div>
+                <button type="button" class="pair-toggle" onclick="togglePair('mix','hands_feet')">+</button>
+              </div>
+              <div class="pair-row" data-henna="mix" data-area="palms">
+                <span class="pair-row__icon">🖐</span>
+                <div class="pair-row__info">
+                  <span class="pair-row__name">Palms Only</span>
+                  <span class="pair-row__price" id="price-mix-palms"></span>
+                </div>
+                <button type="button" class="pair-toggle" onclick="togglePair('mix','palms')">+</button>
+              </div>
+              <div class="pair-row" data-henna="mix" data-area="shoulder_collarbone">
+                <span class="pair-row__icon">🌸</span>
+                <div class="pair-row__info">
+                  <span class="pair-row__name">Shoulder & Collarbone</span>
+                  <span class="pair-row__price" id="price-mix-shoulder_collarbone"></span>
+                </div>
+                <button type="button" class="pair-toggle" onclick="togglePair('mix','shoulder_collarbone')">+</button>
+              </div>
+            </div>
+          </div>
+
+          <label class="option-card" style="max-width:220px;">
+            <input type="checkbox" id="bridalCheckbox" onchange="toggleBridal(this)" />
+            <div class="option-inner">
+              <span class="option-icon">👑</span>
+              <span class="option-name">Bridal Henna</span>
+              <span class="option-desc" id="bridalPriceLabel">Complete package</span>
+            </div>
+          </label>
+
+          <div class="price-summary" id="priceSummary">
+            <div class="price-summary__title">Your Selection</div>
+            <div id="priceSummaryList"><span class="price-summary__empty">Nothing added yet — tap a henna type above to
+                begin.</span></div>
+            <div class="price-summary__total"><span>Total</span><span id="priceSummaryTotal">₦0</span></div>
           </div>
         </div>
 
-        <!-- Step 3: Body Area -->
-        <div class="form-card">
-          <div class="card-label"><span class="step-num">03</span> Which area would you like decorated?</div>
-          <div class="option-grid">
-            <label class="option-card">
-              <input type="checkbox" name="bodyArea" value="hands" />
-              <div class="option-inner">
-                <span class="option-icon">🤲</span>
-                <span class="option-name">Hands Only</span>
-                <span class="option-desc">Both hands</span>
-              </div>
-            </label>
-            <label class="option-card">
-              <input type="checkbox" name="bodyArea" value="feet" />
-              <div class="option-inner">
-                <span class="option-icon">🦶</span>
-                <span class="option-name">Feet Only</span>
-                <span class="option-desc">Both feet</span>
-              </div>
-            </label>
-            <label class="option-card">
-              <input type="checkbox" name="bodyArea" value="hands_feet" />
-              <div class="option-inner">
-                <span class="option-icon">🌸</span>
-                <span class="option-name">Hands & Feet</span>
-                <span class="option-desc">Full set</span>
-              </div>
-            </label>
-            <label class="option-card">
-              <input type="checkbox" name="bodyArea" value="palms" />
-              <div class="option-inner">
-                <span class="option-icon">🖐</span>
-                <span class="option-name">Palms Only</span>
-                <span class="option-desc">Palm designs</span>
-              </div>
-            </label>
-            <label class="option-card">
-              <input type="checkbox" name="bodyArea" value="shoulder_collarbone" />
-              <div class="option-inner">
-                <span class="option-icon">🌸</span>
-                <span class="option-name">Shoulder & Collarbone</span>
-                <span class="option-desc">Shoulder shimmer & collar crown</span>
-              </div>
-            </label>
-          </div>
-        </div>
 
-        <!-- Step 4: Service Location -->
+
+        <!-- Step 3: Service Location -->
         <div class="form-card">
           <div class="card-label"><span class="step-num">04</span> Where will the service take place?</div>
           <div class="option-grid two-col">
@@ -192,68 +283,76 @@
           <div id="homeAddressField" class="hidden form-group form-group--spaced">
             <label for="homeAddress">Your Address</label>
             <input type="text" id="homeAddress" placeholder="Enter your full address" />
-          </div>
-          <div id="studioAddressField" class="hidden" style="margin-top:1rem;">
-            <div class="studio-info-box">
-              <span class="studio-info-icon">📍</span>
-              <div>
-                <strong>Our Studio Address</strong>
-                <p>HajjCamp, Before Alhaji Yakubu Mosque<br /> Gwagwalada, Abuja</p>
-                <small>Open Mon–Sun: 7:00 AM – 7:00 PM</small>
+            <div class="distance-band-field">
+              <label for="distanceBand">How far are you from the studio?</label>
+              <select id="distanceBand" onchange="recalculateTotal()">
+                <option value="" disabled selected>Select distance</option>
+                <option value="within_5km">Within 5 km</option>
+                <option value="5_15km">5 – 15 km</option>
+                <option value="over_15km">Over 15 km</option>
+              </select>
+              < </div>
+                <div id="studioAddressField" class="hidden" style="margin-top:1rem;">
+                  <div class="studio-info-box">
+                    <span class="studio-info-icon">📍</span>
+                    <div>
+                      <strong>Our Studio Address</strong>
+                      <p>HajjCamp, Before Alhaji Yakubu Mosque<br /> Gwagwalada, Abuja</p>
+                      <small>Open Mon–Sun: 7:00 AM – 7:00 PM</small>
+                    </div>
+                  </div>
+                </div>
+
+            </div>
+
+            <!-- Step 5: Payment -->
+            <div class="form-card">
+              <div class="card-label"><span class="step-num">05</span> Payment preference</div>
+              <div class="option-grid two-col">
+                <label class="option-card">
+                  <input type="radio" name="payment" value="deposit" required />
+                  <div class="option-inner">
+                    <span class="option-icon">💳</span>
+                    <span class="option-name">Pay Deposit Now</span>
+                    <span class="option-desc">Secure your spot</span>
+                  </div>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="payment" value="after" />
+                  <div class="option-inner">
+                    <span class="option-icon">💵</span>
+                    <span class="option-name">Pay After Service</span>
+                    <span class="option-desc">Full amount on the day</span>
+                  </div>
+                </label>
               </div>
             </div>
-          </div>
 
-        </div>
-
-        <!-- Step 5: Payment -->
-        <div class="form-card">
-          <div class="card-label"><span class="step-num">05</span> Payment preference</div>
-          <div class="option-grid two-col">
-            <label class="option-card">
-              <input type="radio" name="payment" value="deposit" required />
-              <div class="option-inner">
-                <span class="option-icon">💳</span>
-                <span class="option-name">Pay Deposit Now</span>
-                <span class="option-desc">Secure your spot</span>
+            <!-- Step 6: Personal Info -->
+            <div class="form-card">
+              <div class="card-label"><span class="step-num">06</span> Your details</div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="clientName">Full Name</label>
+                  <input type="text" id="clientName" placeholder="Your full name" required />
+                </div>
+                <div class="form-group">
+                  <label for="clientPhone">Phone Number</label>
+                  <input type="tel" id="clientPhone" placeholder=" e.g. +234 (000) 000-0000" required />
+                </div>
               </div>
-            </label>
-            <label class="option-card">
-              <input type="radio" name="payment" value="after" />
-              <div class="option-inner">
-                <span class="option-icon">💵</span>
-                <span class="option-name">Pay After Service</span>
-                <span class="option-desc">Full amount on the day</span>
+
+              <div class="form-group">
+                <label for="clientNotes">Special Requests / Notes</label>
+                <textarea id="clientNotes" rows="3"
+                  placeholder="Any design ideas, allergies, or special requests…"></textarea>
               </div>
-            </label>
-          </div>
-        </div>
-
-        <!-- Step 6: Personal Info -->
-        <div class="form-card">
-          <div class="card-label"><span class="step-num">06</span> Your details</div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="clientName">Full Name</label>
-              <input type="text" id="clientName" placeholder="Your full name" required />
             </div>
-            <div class="form-group">
-              <label for="clientPhone">Phone Number</label>
-              <input type="tel" id="clientPhone" placeholder=" e.g. +234 (000) 000-0000" required />
-            </div>
-          </div>
 
-          <div class="form-group">
-            <label for="clientNotes">Special Requests / Notes</label>
-            <textarea id="clientNotes" rows="3"
-              placeholder="Any design ideas, allergies, or special requests…"></textarea>
-          </div>
-        </div>
-
-        <button class="btn-primary" type="submit">
-          <span>Confirm Booking</span>
-          <span class="btn-ornament">✦</span>
-        </button>
+            <button class="btn-primary" type="submit">
+              <span>Confirm Booking</span>
+              <span class="btn-ornament">✦</span>
+            </button>
       </form>
 
       <!-- Success Message -->

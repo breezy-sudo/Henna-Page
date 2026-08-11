@@ -617,8 +617,11 @@
                 <div class="detail-item">🕐 <span>${b.time || '-'}</span></div>
                 <div class="detail-item">📞 <span>${b.phone || '-'}</span></div>
                 <div class="detail-item">📧 <span>${b.email || '-'}</span></div>
-                <div class="detail-item">🌿 <span>${Array.isArray(b.hennaType) ? b.hennaType.join(', ') : (b.hennaType || '-')}</span></div>
-                <div class="detail-item">🖐 <span>${Array.isArray(b.bodyArea) ? b.bodyArea.join(', ') : (b.bodyArea || '-')}</span></div>
+                 <div class="detail-item">🌿 <span>${(b.selections && b.selections.length ? b.selections.map(s => `${s.hennaType} on ${s.bodyArea}`).join(', ') : '')
+                            + (b.bridal ? (b.selections && b.selections.length ? ' + ' : '') + 'Bridal package' : '')
+                            || '-'
+                            }</span></div>
+               
                 <div class="detail-item">📍 <span>${b.location || '-'}</span></div>
                 <div class="detail-item">💳 <span>${b.payment || '-'}</span></div>
                 ${b.notes ? `<div class="detail-item">📝 <span>${b.notes}</span></div>` : ''}
