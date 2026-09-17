@@ -490,6 +490,18 @@
                     <div class="num" id="statRejected">0</div>
                     <div class="label">Rejected</div>
                 </div>
+                <div class="stat-card">
+                    <div class="num" id="statPaid">0</div>
+                    <div class="label">Paid Online</div>
+                </div>
+                <div class="stat-card">
+                    <div class="num" id="statRevenue">₦0</div>
+                    <div class="label">Money Received</div>
+                </div>
+                <div class="stat-card">
+                    <div class="num" id="statOutstanding">₦0</div>
+                    <div class="label">Awaiting Payment</div>
+                </div>
             </div>
 
             <h2 class="section-title">All Bookings</h2>
@@ -581,6 +593,16 @@
                     document.getElementById('statConfirmed').textContent = bookings.filter(b => b.status === 'approved').length;
                     document.getElementById('statRejected').textContent = bookings.filter(b => b.status === 'rejected').length;
 
+                    // ── Payment figures (Monnify) ──
+                    const paid = bookings.filter(b => b.paymentStatus === 'paid');
+                    const received = paid.reduce((sum, b) => sum + (Number(b.amountPaid) || Number(b.amountDue) || 0), 0);
+                    const outstanding = bookings
+                        .filter(b => b.paymentStatus !== 'paid' && b.status !== 'rejected')
+                        .reduce((sum, b) => sum + (Number(b.amountDue) || 0), 0);
+                    document.getElementById('statPaid').textContent = paid.length;
+                    document.getElementById('statRevenue').textContent = formatNaira(received);
+                    document.getElementById('statOutstanding').textContent = formatNaira(outstanding);
+
                     if (bookings.length === 0) {
                         list.innerHTML = `
           <div class="empty-state">
@@ -623,7 +645,8 @@
                             }</span></div>
                
                 <div class="detail-item">📍 <span>${b.location || '-'}</span></div>
-                <div class="detail-item">💳 <span>${b.payment || '-'}</span></div>
+                <div class="detail-item">💳 <span>${paymentLabel(b)}</span></div>
+                ${b.paymentReference ? `<div class="detail-item">🧾 <span>${b.paymentReference}</span></div>` : ''}
                 ${b.notes ? `<div class="detail-item">📝 <span>${b.notes}</span></div>` : ''}
               </div>
             </div>
@@ -661,13 +684,26 @@
                 .catch(error => console.error('Error loading bookings:', error));
         }
 
+        // ── Money helpers (used by the payment stats and cards) ──
+        function formatNaira(amount) {
+            return '₦' + Number(amount || 0).toLocaleString('en-NG');
+        }
+
+        function paymentLabel(b) {
+            const due = Number(b.amountDue) || 0;
+            if (b.paymentStatus === 'paid') {
+                const when = b.paidAt ? new Date(b.paidAt).toLocaleDateString('en-NG') : '';
+                return `PAID ${formatNaira(b.amountPaid || due)}${when ? ' on ' + when : ''}`;
+            }
+            if (due > 0) return `Unpaid — ${formatNaira(due)} due`;
+            return b.payment || 'Pay on the day';
+        }
+
         // ── Update Booking Status ──
         function updateStatus(bookingId, newStatus) {
             fetch(`${API_BASE}/bookings/${bookingId}`, {
                 method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: authHeaders(),
                 body: JSON.stringify({ status: newStatus })
             })
                 .then(response => response.json())
@@ -685,9 +721,7 @@
             }
             fetch(`${API_BASE}/bookings/${bookingId}`, {
                 method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: authHeaders(),
             })
                 .then(response => response.json())
                 .then(data => {

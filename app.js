@@ -42,6 +42,7 @@ document.querySelectorAll('input[name="location"]').forEach(radio => {
       field.classList.add('hidden');
       addressInput.removeAttribute('required');
     }
+    recalculateTotal();
   });
 });
 
@@ -158,6 +159,7 @@ const HOME_SERVICE_BANDS = {
   over_15km: 5000
 };
 
+
 const AREA_LABELS = {
   hands: 'Hands Only',
   feet: 'Feet Only',
@@ -185,11 +187,20 @@ if (bridalLabelEl) bridalLabelEl.textContent = `Complete package — ${formatNai
 let selectedPairs = new Set();
 let bridalSelected = false;
 
+// The three henna types now sit side by side like tabs: clicking one opens its
+// options underneath and closes the other two, so only one list shows at a time.
 function toggleAccordion(hennaType) {
   const body = document.getElementById(`body-${hennaType}`);
-  const header = body.previousElementSibling;
-  body.classList.toggle('open');
-  header.classList.toggle('open');
+  const tab = document.getElementById(`tab-${hennaType}`);
+  const wasOpen = body.classList.contains('open');
+
+  document.querySelectorAll('.henna-panel').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.henna-tab').forEach(t => t.classList.remove('open'));
+
+  if (!wasOpen) {
+    body.classList.add('open');
+    tab.classList.add('open');
+  }
 }
 
 function togglePair(hennaType, bodyArea) {
@@ -216,9 +227,11 @@ function togglePair(hennaType, bodyArea) {
 function updateAccordionBadge(hennaType) {
   const count = Array.from(selectedPairs).filter(k => k.startsWith(hennaType + '_')).length;
   const badge = document.getElementById(`badge-${hennaType}`);
-  const accordion = document.getElementById(`accordion-${hennaType}`);
+  const tab = document.getElementById(`tab-${hennaType}`);
+  const panel = document.getElementById(`body-${hennaType}`);
   badge.textContent = count > 0 ? `${count} added` : '';
-  accordion.classList.toggle('has-selection', count > 0);
+  if (tab) tab.classList.toggle('has-selection', count > 0);
+  if (panel) panel.classList.toggle('has-selection', count > 0);
 }
 
 function toggleBridal(checkbox) {
@@ -258,7 +271,21 @@ function recalculateTotal() {
     ? lines.join('')
     : '<span class="price-summary__empty">Nothing added yet — tap a henna type above to begin.</span>';
   totalEl.textContent = formatNaira(total);
+
+  // remember the current basket so the payment pop-up can show the same figures
+  currentTotal = total;
+  currentLines = lines;
+
+  // The "pay now" card shows exactly what the customer will be charged
+  const payNowHint = document.getElementById('depositHintLabel');
+  if (payNowHint) {
+    payNowHint.textContent = total > 0 ? `Pay ${formatNaira(total)} now` : 'Secure your spot';
+  }
 }
+
+// Latest calculated total + summary lines, shared with the payment pop-up
+let currentTotal = 0;
+let currentLines = [];
 
 
 // ── Booking Form Submit ───────────────────────────────────────
@@ -284,6 +311,7 @@ function submitBooking(e) {
   const homeAddress = document.getElementById('homeAddress')?.value.trim() || "";
   const distanceBand = location === 'home' ? (document.getElementById('distanceBand')?.value || "") : "";
   const payment = document.querySelector('input[name="payment"]:checked')?.value;
+  const email = document.getElementById('clientEmail')?.value.trim() || "";
   const notes = document.getElementById('clientNotes').value.trim();
 
 
@@ -302,6 +330,12 @@ function submitBooking(e) {
     return;
   }
 
+  // Paying online needs an email so the payment receipt has somewhere to go
+  if (payment === 'deposit' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showToast('Please enter a valid email address so we can send your payment receipt.', 'error');
+    return;
+  }
+
   // creating boooking object
   const bookingData = {
     name: name,
@@ -309,8 +343,9 @@ function submitBooking(e) {
     date: date,
     time: time,
     selections: selections,
-    bridalSelected: bridalSelected,
+    bridal: bridalSelected,
     location: location,
+    email: email,
     homeAddress: homeAddress,
     distanceBand: distanceBand,
     payment: payment,
@@ -327,9 +362,25 @@ function submitBooking(e) {
     },
     body: JSON.stringify(bookingData)
   })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Booking saved to mongoDB:', data);
+    .then(response => response.json().then(body => ({ ok: response.ok, body })))
+    .then(({ ok, body }) => {
+      if (!ok || !body.booking) {
+        throw new Error(body.message || 'Booking was not saved');
+      }
+
+      // Remember which booking this is, so the payment pop-up can charge it
+      pendingBooking = {
+        id: body.booking._id,
+        email: email,
+        name: name
+      };
+
+      if (payment === 'deposit') {
+        // Show the pop-up with the exact total built from their own selections
+        openPayModal();
+        showToast('Booking saved — complete your payment to confirm. 🌸', 'success');
+        return;
+      }
 
       // Show success
       document.getElementById('bookingForm').classList.add('hidden');
@@ -344,6 +395,8 @@ function submitBooking(e) {
 };
 // ── Reset form ────────────────────────────────────────────────
 function resetForm() {
+  pendingBooking = null;
+  closePayModal();
   document.getElementById('bookingForm').reset();
   document.getElementById('bookingForm').classList.remove('hidden');
   document.getElementById('successMsg').classList.add('hidden');
@@ -446,3 +499,148 @@ document.querySelectorAll('.form-card, .value-card, .gallery-item, .contact-info
   el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
   observer.observe(el);
 });
+
+/* ============================================================
+   PAYMENT POP-UP
+   Shows the customer the exact total built from the henna types
+   and areas they picked (plus home-service fee), then hands them
+   over to the secure payment page.
+
+   The amount shown here is for the customer's eyes only — the
+   server recalculates it from the saved booking before charging,
+   so nothing typed or edited in the browser can change the price.
+   ============================================================ */
+
+// The booking just saved to the database, waiting to be paid for
+let pendingBooking = null;
+
+function openPayModal() {
+  const overlay = document.getElementById('payOverlay');
+  if (!overlay) return;
+
+  document.getElementById('payTotalAmount').textContent = formatNaira(currentTotal);
+  document.getElementById('payTotalNote').textContent =
+    pendingBooking && pendingBooking.name ? `for ${pendingBooking.name}` : '';
+
+  // Repeat their selection inside the pop-up so they can see what they're paying for
+  const breakdown = document.getElementById('payBreakdown');
+  breakdown.innerHTML =
+    currentLines.join('').replace(/price-summary__line/g, 'pay-modal__line') +
+    `<div class="pay-modal__line pay-modal__line--total"><span>Total</span><span>${formatNaira(currentTotal)}</span></div>`;
+
+  overlay.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePayModal() {
+  const overlay = document.getElementById('payOverlay');
+  if (!overlay) return;
+  overlay.classList.add('hidden');
+  document.body.style.overflow = '';
+  setPayButtonBusy(false);
+}
+
+function setPayButtonBusy(busy) {
+  const btn = document.getElementById('payProceedBtn');
+  const text = document.getElementById('payProceedText');
+  if (!btn || !text) return;
+  btn.disabled = busy;
+  text.textContent = busy ? 'Opening secure payment…' : 'Pay Now';
+}
+
+function proceedToPayment() {
+  if (!pendingBooking) {
+    showToast('Please submit your booking first.', 'error');
+    return;
+  }
+
+  setPayButtonBusy(true);
+
+  fetch(`${API_BASE}/payment/checkout/${pendingBooking.id}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: pendingBooking.email })
+  })
+    .then(response => response.json().then(body => ({ ok: response.ok, body })))
+    .then(({ ok, body }) => {
+      if (!ok || !body.checkoutUrl) {
+        throw new Error(body.message || 'Could not start payment');
+      }
+      // Keep the reference so we can confirm the payment when they come back
+      try {
+        localStorage.setItem('meenahs_pending_payment', JSON.stringify({
+          bookingId: pendingBooking.id,
+          transactionReference: body.transactionReference
+        }));
+      } catch (e) { /* private browsing — verification still works via the redirect */ }
+
+      window.location.href = body.checkoutUrl;
+    })
+    .catch(error => {
+      console.error('Payment error:', error);
+      setPayButtonBusy(false);
+      showToast('We could not open the payment page. Please try again.', 'error');
+    });
+}
+
+// Close the pop-up on Escape or a click on the dark backdrop
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closePayModal();
+});
+const payOverlayEl = document.getElementById('payOverlay');
+if (payOverlayEl) {
+  payOverlayEl.addEventListener('click', e => {
+    if (e.target === payOverlayEl) closePayModal();
+  });
+}
+
+/* ── Coming back from the payment page ────────────────────────
+   Never trust the payment page's own "success" message — we ask
+   our server to check with the payment provider directly. */
+(function confirmPaymentOnReturn() {
+  const params = new URLSearchParams(window.location.search);
+  let reference = params.get('paymentReference') || params.get('transactionReference');
+
+  if (!reference) {
+    try {
+      const saved = JSON.parse(localStorage.getItem('meenahs_pending_payment') || 'null');
+      if (saved && params.has('paymentStatus')) reference = saved.transactionReference;
+    } catch (e) { /* ignore */ }
+  }
+
+  if (!reference) return;
+
+  fetch(`${API_BASE}/payment/verify`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ transactionReference: reference })
+  })
+    .then(response => response.json().then(body => ({ ok: response.ok, body })))
+    .then(({ ok, body }) => {
+      try { localStorage.removeItem('meenahs_pending_payment'); } catch (e) { /* ignore */ }
+
+      const form = document.getElementById('bookingForm');
+      const success = document.getElementById('successMsg');
+
+      if (ok) {
+        if (form) form.classList.add('hidden');
+        if (success) {
+          success.classList.remove('hidden');
+          const heading = success.querySelector('h3');
+          const body2 = success.querySelector('p');
+          if (heading) heading.textContent = 'Payment received — your appointment is confirmed!';
+          if (body2) body2.textContent = 'Thank you for booking with Meenahs Henna Art. We\'ll reach out shortly with your session details.';
+        }
+        showToast('Payment confirmed. Thank you! 🌸', 'success');
+      } else {
+        showToast(body.message || 'We could not confirm that payment yet.', 'error');
+      }
+
+      // Tidy the payment details out of the address bar
+      window.history.replaceState({}, '', window.location.pathname);
+    })
+    .catch(error => {
+      console.error('Verify error:', error);
+      showToast('We could not confirm your payment. Please contact us on WhatsApp.', 'error');
+    });
+})();

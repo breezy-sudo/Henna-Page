@@ -1,0 +1,103 @@
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const mongoSanitize = require('express-mongo-sanitize');
+const hpp = require('hpp');
+require('dotenv').config();
+const app = express();
+const PORT = process.env.PORT || 7000;
+const allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost:5500',
+    'http://127.0.0.1:5500',
+    'http://localhost:7000',
+    'https://meenahs-henna-art.vercel.app',
+    'https://www.meenahs-henna-art.vercel.app',
+    'https://meenahs-server-production.up.railway.app'
+];
+
+// Trust proxy for railway deployment
+app.set('trust proxy', 1);
+
+// security middleware
+app.use(helmet()); //secure HTTP headers
+app.use(hpp()); // prevent HTTPparameters pollution
+
+// rate limiting
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+    message: 'Too many requests from this IP, please try again later.'
+});
+app.use(limiter);
+
+// stricter limiter just for admin login — slows down brute-force password guessing
+const loginLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 5, // only 5 login attempts per IP per window
+    message: 'Too many login attempts, please try again later.'
+});
+
+// body parser and data sanitization
+app.use(express.json());
+app.use(mongoSanitize()); // sanitize data to prevent NoSQL injection and also remove $ and . from user unput
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(null, false);
+        }
+    },
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+}));
+
+// connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/Meenahshennaart')
+    .then(() => console.log('✅MongoDB connected successfully!'))
+    .catch((err) => console.log('❌MongoDB connection error:', err));
+
+// routes
+const bookingRoutes = require('./routes/instrn.js');
+const paymentRoutes = require('./routes/payment.js');
+const adminAuthRoutes = require('./routes/adminAuth.js');
+app.use('/bookings', bookingRoutes);
+app.use('/admin/login', loginLimiter);
+app.use('/admin', adminAuthRoutes);
+app.use('/payment', paymentRoutes);
+app.get('/', (req, res) => {
+    res.send('🌸 Meenahs Henna Art Server is running!');
+});
+
+// Health check — Railway (and any uptime monitor) pings this to know the app is alive.
+const mongooseStates = ['disconnected', 'connected', 'connecting', 'disconnecting'];
+app.get('/health', (req, res) => {
+    res.json({
+        status: 'ok',
+        database: mongooseStates[mongoose.connection.readyState] || 'unknown',
+        monnify: {
+            baseUrl: process.env.MONNIFY_BASE_URL || 'https://sandbox.monnify.com (default)',
+            apiKeySet: !!process.env.MONNIFY_API_KEY,
+            secretKeySet: !!process.env.MONNIFY_SECRET_KEY,
+            contractCodeSet: !!process.env.MONNIFY_CONTRACT_CODE,
+            redirectUrlSet: !!process.env.MONNIFY_REDIRECT_URL
+        },
+        admin: {
+            usernameSet: !!process.env.ADMIN_USERNAME,
+            passwordHashSet: !!process.env.ADMIN_PASSWORD_HASH,
+            jwtSecretSet: !!process.env.JWT_SECRET
+        },
+        time: new Date().toISOString()
+    });
+});
+
+
+// start server
+
+app.listen(PORT, () => {
+    console.log(`🚀Server is running on http://localhost:${PORT}`);
+})

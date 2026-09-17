@@ -86,14 +86,26 @@
           <div class="card-label"><span class="step-num">02</span> Choose your henna type, then add the areas you'd like
             decorated</div>
 
-          <div class="henna-accordion" id="accordion-local">
-            <button type="button" class="henna-accordion__header" onclick="toggleAccordion('local')">
-              <span class="henna-accordion__icon">🌿</span>
-              <span class="henna-accordion__name">Local Henna</span>
+                    <div class="henna-tabs">
+            <button type="button" class="henna-tab henna-tab--local" id="tab-local" onclick="toggleAccordion('local')">
+              <span class="henna-tab__icon">🌿</span>
+              <span class="henna-tab__name">Local Henna</span>
               <span class="henna-accordion__badge" id="badge-local"></span>
-              <span class="henna-accordion__chevron">⌄</span>
             </button>
-            <div class="henna-accordion__body" id="body-local">
+            <button type="button" class="henna-tab henna-tab--black" id="tab-black" onclick="toggleAccordion('black')">
+              <span class="henna-tab__icon">🖤</span>
+              <span class="henna-tab__name">Black Henna</span>
+              <span class="henna-accordion__badge" id="badge-black"></span>
+            </button>
+            <button type="button" class="henna-tab henna-tab--mix" id="tab-mix" onclick="toggleAccordion('mix')">
+              <span class="henna-tab__icon">✨</span>
+              <span class="henna-tab__name">Mix / Custom</span>
+              <span class="henna-accordion__badge" id="badge-mix"></span>
+            </button>
+          </div>
+
+          <div class="henna-panels">
+            <div class="henna-accordion__body henna-panel henna-panel--local" id="body-local">
               <div class="pair-row" data-henna="local" data-area="hands">
                 <span class="pair-row__icon">🤲</span>
                 <div class="pair-row__info">
@@ -135,16 +147,7 @@
                 <button type="button" class="pair-toggle" onclick="togglePair('local','shoulder_collarbone')">+</button>
               </div>
             </div>
-          </div>
-
-          <div class="henna-accordion" id="accordion-black">
-            <button type="button" class="henna-accordion__header" onclick="toggleAccordion('black')">
-              <span class="henna-accordion__icon">🖤</span>
-              <span class="henna-accordion__name">Black Henna</span>
-              <span class="henna-accordion__badge" id="badge-black"></span>
-              <span class="henna-accordion__chevron">⌄</span>
-            </button>
-            <div class="henna-accordion__body" id="body-black">
+            <div class="henna-accordion__body henna-panel henna-panel--black" id="body-black">
               <div class="pair-row" data-henna="black" data-area="hands">
                 <span class="pair-row__icon">🤲</span>
                 <div class="pair-row__info">
@@ -186,16 +189,7 @@
                 <button type="button" class="pair-toggle" onclick="togglePair('black','shoulder_collarbone')">+</button>
               </div>
             </div>
-          </div>
-
-          <div class="henna-accordion" id="accordion-mix">
-            <button type="button" class="henna-accordion__header" onclick="toggleAccordion('mix')">
-              <span class="henna-accordion__icon">✨</span>
-              <span class="henna-accordion__name">Mix / Custom</span>
-              <span class="henna-accordion__badge" id="badge-mix"></span>
-              <span class="henna-accordion__chevron">⌄</span>
-            </button>
-            <div class="henna-accordion__body" id="body-mix">
+            <div class="henna-accordion__body henna-panel henna-panel--mix" id="body-mix">
               <div class="pair-row" data-henna="mix" data-area="hands">
                 <span class="pair-row__icon">🤲</span>
                 <div class="pair-row__info">
@@ -239,6 +233,8 @@
             </div>
           </div>
 
+          
+          
           <label class="option-card" style="max-width:220px;">
             <input type="checkbox" id="bridalCheckbox" onchange="toggleBridal(this)" />
             <div class="option-inner">
@@ -260,7 +256,7 @@
 
         <!-- Step 3: Service Location -->
         <div class="form-card">
-          <div class="card-label"><span class="step-num">04</span> Where will the service take place?</div>
+          <div class="card-label"><span class="step-num">03</span> Where will the service take place?</div>
           <div class="option-grid two-col">
             <label class="option-card">
               <input type="radio" name="location" value="studio" required />
@@ -276,10 +272,11 @@
                 <span class="option-icon">🚗</span>
                 <span class="option-name">Home Service</span>
                 <span class="option-desc">We come to you</span>
-
               </div>
             </label>
           </div>
+
+          <!-- Shown only for Home Service -->
           <div id="homeAddressField" class="hidden form-group form-group--spaced">
             <label for="homeAddress">Your Address</label>
             <input type="text" id="homeAddress" placeholder="Enter your full address" />
@@ -292,67 +289,74 @@
                 <option value="over_15km">Over 15 km</option>
               </select>
             </div>
-            <div id="studioAddressField" class="hidden" style="margin-top:1rem;">
-              <div class="studio-info-box">
-                <span class="studio-info-icon">📍</span>
-                <div>
-                  <strong>Our Studio Address</strong>
-                  <p>HajjCamp, Before Alhaji Yakubu Mosque<br /> Gwagwalada, Abuja</p>
-                  <small>Open Mon–Sun: 7:00 AM – 7:00 PM</small>
-                </div>
-              </div>
-            </div>
-
           </div>
 
-          <!-- Step 5: Payment -->
-          <div class="form-card">
-            <div class="card-label"><span class="step-num">05</span> Payment preference</div>
-            <div class="option-grid two-col">
-              <label class="option-card">
-                <input type="radio" name="payment" value="deposit" required />
-                <div class="option-inner">
-                  <span class="option-icon">💳</span>
-                  <span class="option-name">Pay Deposit Now</span>
-                  <span class="option-desc">Secure your spot</span>
-                </div>
-              </label>
-              <label class="option-card">
-                <input type="radio" name="payment" value="after" />
-                <div class="option-inner">
-                  <span class="option-icon">💵</span>
-                  <span class="option-name">Pay After Service</span>
-                  <span class="option-desc">Full amount on the day</span>
-                </div>
-              </label>
+          <!-- Shown only for Visit Studio -->
+          <div id="studioAddressField" class="hidden form-group--spaced">
+            <div class="studio-info-box">
+              <span class="studio-info-icon">📍</span>
+              <div>
+                <strong>Our Studio Address</strong>
+                <p>HajjCamp, Before Alhaji Yakubu Mosque<br /> Gwagwalada, Abuja</p>
+                <small>Open Mon–Sun: 7:00 AM – 7:00 PM</small>
+              </div>
             </div>
           </div>
+        </div>
 
-          <!-- Step 6: Personal Info -->
-          <div class="form-card">
-            <div class="card-label"><span class="step-num">06</span> Your details</div>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="clientName">Full Name</label>
-                <input type="text" id="clientName" placeholder="Your full name" required />
+        <!-- Step 4: Payment -->
+        <div class="form-card">
+          <div class="card-label"><span class="step-num">04</span> Payment preference</div>
+          <div class="option-grid two-col">
+            <label class="option-card">
+              <input type="radio" name="payment" value="deposit" required />
+              <div class="option-inner">
+                <span class="option-icon">💳</span>
+                <span class="option-name">Pay Now</span>
+                <span class="option-desc" id="depositHintLabel">Secure your spot</span>
               </div>
-              <div class="form-group">
-                <label for="clientPhone">Phone Number</label>
-                <input type="tel" id="clientPhone" placeholder=" e.g. +234 (000) 000-0000" required />
+            </label>
+            <label class="option-card">
+              <input type="radio" name="payment" value="after" />
+              <div class="option-inner">
+                <span class="option-icon">💵</span>
+                <span class="option-name">Pay After Service</span>
+                <span class="option-desc">Full amount on the day</span>
               </div>
-            </div>
+            </label>
+          </div>
+        </div>
 
+        <!-- Step 5: Personal Info -->
+        <div class="form-card">
+          <div class="card-label"><span class="step-num">05</span> Your details</div>
+          <div class="form-row">
             <div class="form-group">
-              <label for="clientNotes">Special Requests / Notes</label>
-              <textarea id="clientNotes" rows="3"
-                placeholder="Any design ideas, allergies, or special requests…"></textarea>
+              <label for="clientName">Full Name</label>
+              <input type="text" id="clientName" placeholder="Your full name" required maxlength="100" />
+            </div>
+            <div class="form-group">
+              <label for="clientPhone">Phone Number</label>
+              <input type="tel" id="clientPhone" placeholder=" e.g. +234 (000) 000-0000" required maxlength="20" />
             </div>
           </div>
 
-          <button class="btn-primary" type="submit">
-            <span>Confirm Booking</span>
-            <span class="btn-ornament">✦</span>
-          </button>
+          <div class="form-group form-group--spaced">
+            <label for="clientEmail">Email Address <span class="label-hint">(for your payment receipt)</span></label>
+            <input type="email" id="clientEmail" placeholder="you@example.com" maxlength="255" />
+          </div>
+
+          <div class="form-group form-group--spaced">
+            <label for="clientNotes">Special Requests / Notes</label>
+            <textarea id="clientNotes" rows="3" maxlength="1000"
+              placeholder="Any design ideas, allergies, or special requests…"></textarea>
+          </div>
+        </div>
+
+        <button class="btn-primary" type="submit">
+          <span>Confirm Booking</span>
+          <span class="btn-ornament">✦</span>
+        </button>
       </form>
 
       <!-- Success Message -->
@@ -541,6 +545,37 @@
     <p class="footer-name">Meenahs Henna Art</p>
     <p class="footer-copy">© 2026 Meenahs Henna Art. All rights reserved. Crafted with love.</p>
   </footer>
+
+
+  <!-- ===== Payment Pop-up (deposit via Monnify) ===== -->
+  <div class="pay-overlay hidden" id="payOverlay" role="dialog" aria-modal="true" aria-labelledby="payTitle">
+    <div class="pay-modal">
+      <button type="button" class="pay-modal__close" onclick="closePayModal()" aria-label="Close">×</button>
+      <div class="pay-modal__ornament">✦ ❧ ✦</div>
+      <p class="pay-modal__eyebrow">Secure your appointment</p>
+      <h3 class="pay-modal__title" id="payTitle">Complete Your Payment</h3>
+      <div class="divider"><span>❧</span></div>
+
+      <div class="pay-modal__amount">
+        <span class="pay-modal__amount-label">Total due</span>
+        <span class="pay-modal__amount-value" id="payTotalAmount">₦0</span>
+        <span class="pay-modal__amount-note" id="payTotalNote"></span>
+      </div>
+
+      <div class="pay-modal__lines" id="payBreakdown"></div>
+
+      <p class="pay-modal__reassure">
+        You'll be taken to our secure payment page to complete this payment. Your appointment is confirmed as soon as
+        it goes through.
+      </p>
+
+      <button type="button" class="btn-primary" id="payProceedBtn" onclick="proceedToPayment()">
+        <span id="payProceedText">Pay Now</span>
+        <span class="btn-ornament">✦</span>
+      </button>
+      <button type="button" class="pay-modal__later" onclick="closePayModal()">I'll pay on the day instead</button>
+    </div>
+  </div>
 
   <script src="app.js"></script>
 </body>
